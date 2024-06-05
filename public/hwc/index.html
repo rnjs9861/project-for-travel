@@ -3,25 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/test.css" />
-    <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css">
+    <link href="./css/test.css" media="screen and (min-width: 512px) and (max-width: 1024px)" rel="stylesheet">
+    <link rel="stylesheet" href="./css/mobilestyle.css">
     <title>상세 일정 페이지</title>
     </style>
   </head>
   <body>
+    <body style="background-color:rgb(0,0,0, .1)">
     <div class="index-container-wrap">
       <div class="index-schedule-input">일정 입력</div>
       <div class="index-detail-input">내용 입력</div>
       <h1 class="index-c-title">
         <p class="index-c-text__box">
-          <strong>상세 일정 페이지</strong>
+          <strong class="index-text-strong">상세 일정 페이지</strong>
         </p>
       </h1>
     </div>
+
+
     <div class="index-left-selection">
       <div class="index-travel-schedule">
         <h3 class="index-travelday-input">
           <ul class="index-p-note">
+            <li>DAY-1(작성 일자)</li>
+            <hr>
             <li>제목</li>
             <li>날짜</li>
             <li>종료 날짜</li>
@@ -33,6 +38,9 @@
         <div class="index-text-box">
           <h3 class="index-input-text">
             <ui class="index-detail">
+              <input type="textbox" style="font-size: 12pt" 
+              placeholder="ex) 2024-05-12" />
+              <hr>
               <input type="textbox" style="font-size: 12pt" 
               placeholder="제목을 입력하십시오" />
               <input style="font-size: 12pt" id="website" 
@@ -50,14 +58,16 @@
         </div>
       </div>
     </div>
+
+
     <div class="index-right-selection">
       <div class="index-travel-schedule-right">
         <p class="index-travelday-right-input">상세 스케줄을 입력해주십시오</p>
       </div>
     </div>
     <form>
-      <button type="button" class="index-foor-back">뒤로 가기</button>
-      <button type="button" class="index-page-save">저장</button>
+      <button class="index-foor-back">뒤로 가기</button>
+      <button class="index-page-save">저장</button>
     </form>
   </body>
 </html>
