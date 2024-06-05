@@ -1,5 +1,66 @@
+@media scrren and (max-width: 512px) {
+  .index-page-save {
+    box-sizing: border-box;
+    text-align: center;
+    position: absolute;
+
+    background: #bfeffa;
+    border: 1px solid #000000;
+  }
+}
+
 @media screen and (max-width: 512px) {
   .index-c-text__box {
-    background-color: white;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+    box-shadow: 4px 4px 4px black;
+
+    background-color: #bfeffa;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .index-travel-schedule {
+    box-sizing: border-box;
+    position: absolute;
+    width: 520px;
+    height: 550px;
+    left: 0px;
+    top: 200px;
+  }
+}
+
+@media scrren and (max-width: 512px) {
+  .index-right-selection {
+    box-sizing: border-box;
+    box-shadow: 3px 3px 3px black;
+
+    position: absolute;
+    width: 450px;
+    height: 360px;
+    left: 685px;
+    top: 0px;
+
+    background: #88f286;
+    border: 1px solid #000000;
+    border-radius: 10px;
+  }
+}
+
+@media screen and (max-width: 512px) {
+  .index-travel-schedule-right {
+    box-sizing: border-box;
+    position: absolute;
+    width: 420px;
+    height: 300px;
+    left: 0px;
+    top: 600px;
+
+    background: #c3fdde;
+    border: 1px solid #000000;
+    border-radius: 10px;
   }
 }
