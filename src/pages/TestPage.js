@@ -1,13 +1,7 @@
 import React from "react";
-import Buttons from "../components/common/Button";
 
 const TestPage = () => {
-  return (
-    <>
-      <div>test</div>
-      <Buttons>버튼입니다.</Buttons>
-    </>
-  );
+  return <div>test</div>;
 };
 
 export default TestPage;
