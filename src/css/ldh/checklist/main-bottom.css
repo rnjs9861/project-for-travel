@@ -1,21 +1,24 @@
 .main-bottom {
   margin: 30px 0 0;
 }
+.main-bottom-wrap {
+  width: 90%;
+  margin: 0 auto;
+}
 .main-bottom-check {
   background-color: aquamarine;
-  margin: 0 auto;
   padding: 30px;
-  width: 90%;
-  height: 4000px;
+  width: 100%;
+  gap: 20px;
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
 }
 .main-bottom-check-list {
   display: flex;
   align-items: center;
   height: 50px;
   gap: 10px;
-  width: 50%;
+  width: calc(23%);
   background-color: azure;
 }
 .main-bottom-check-list img {
@@ -25,14 +28,6 @@
 }
 .check-list-contents {
   font-size: 20px;
-}
-.main-bottom-check-list-right {
-  display: flex;
-  align-items: center;
-  height: 50px;
-  gap: 10px;
-  width: 50%;
-  background-color: azure;
 }
 .main-bottom-check-list {
   position: relative;

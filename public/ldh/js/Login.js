@@ -2,8 +2,7 @@ window.addEventListener("load", function () {
   // placeholder 없애기
   const uId = document.querySelector(".uid");
   const uPass = document.querySelector(".password");
-  const cleanIconId = document.querySelector(".cleanupico-id");
-  const cleanIconPass = document.querySelector(".cleanupico-pass");
+
   uId.addEventListener("focus", function () {
     uId.placeholder = "";
   });
@@ -34,6 +33,8 @@ window.addEventListener("load", function () {
     }
   });
   // x 버튼 누르면 input 비우기
+  const cleanIconId = document.querySelector(".cleanupico-id");
+  const cleanIconPass = document.querySelector(".cleanupico-pass");
   uId.addEventListener("keyup", function (e) {
     if (e.target.value === "") {
       cleanIconId.style.display = "none";
@@ -57,30 +58,30 @@ window.addEventListener("load", function () {
     cleanIconPass.style.display = "none";
   });
   //   회원이 아니라면 회원가입해주세요, 맞다면 알람
-  //   const noneUser = document.querySelector(".none-user");
-  //   const userInfo = "./apis/login.json";
-  //   const idForm = document.querySelector(".idform");
-  //   const passForm = document.querySelector(".passform");
-  //   idForm.addEventListener("submit", function () {
-  //     fetch(userInfo)
-  //       .then(res => {
-  //         const result = res.json();
-  //         return result;
-  //       })
-  //       .then(result => {
-  //         const inputId = uId.value;
-  //         const inputPass = uPass.value;
-  //         const user = result.find(
-  //           result => result.userid === inputId && result.userpass === inputPass,
-  //         );
-  //         if (user) {
-  //           alert("로그인성공");
-  //         } else {
-  //           noneUser.style.display = "block";
-  //         }
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       });
-  //   });
+  // const noneUser = document.querySelector(".none-user");
+  // const userInfo = "./apis/login.json";
+  // const idForm = document.querySelector(".idform");
+  // const passForm = document.querySelector(".passform");
+  // idForm.addEventListener("submit", function () {
+  //   fetch(userInfo)
+  //     .then(res => {
+  //       const result = res.json();
+  //       return result;
+  //     })
+  //     .then(result => {
+  //       const inputId = uId.value;
+  //       const inputPass = uPass.value;
+  //       const user = result.find(
+  //         result => result.userid === inputId && result.userpass === inputPass,
+  //       );
+  //       if (user) {
+  //         alert("로그인성공");
+  //       } else {
+  //         noneUser.style.display = "block";
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // });
 });
