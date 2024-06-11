@@ -6,49 +6,43 @@ import "../../css/ldh/checklist/main-bottom.css";
 import "../../css/ldh/checklist/main-top.css";
 import "../../css/ldh/checklist/main.css";
 
-const CheckList = () => {
+const CheckList = ({ tour_id }) => {
   const [onAdd, setOnAdd] = useState("");
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
-  const [isChecked, setIsChecked] = useState([]);
+
 
   const handleOnSubmit = e => {
     e.preventDefault();
+    // const reqData = {
+    //   resultData: onAdd,
+    //   tour_id: 11,
+    // };
     if (onAdd === "") {
       return setMessage("추가할 물건을 기입해주세요");
     }
     if (onAdd) {
       setList([...list, onAdd]);
-      setIsChecked([...isChecked, false]);
       setOnAdd("");
       setMessage("");
     }
-    const reqData = {
-      tour_id: 3,
-      title: onAdd,
-    };
-    // console.log(reqData);
-    postList(reqData);
+    // postList(reqData);
   };
 
-  const postList = async data => {
-    try {
-      const response = await axios.post("/api/tour/checklist", data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const postList = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       `/api/tour/checklist?tour_id=${tour_id}&title=${onAdd}`,
+  //     );
+  //     console.log(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const handleRemove = itemRemove => {
-    setList(list.filter((_, index) => index !== itemRemove));
-    setIsChecked(isChecked.filter((_, index) => index !== itemRemove));
+    setList(list.filter(item => item !== itemRemove));
   };
-  const handleCheck = index => {
-    const checked = [...isChecked];
-    checked[index] = !checked[index];
-    setIsChecked(checked);
-  };
-
   useEffect(() => {
     return () => {};
   }, []);
@@ -77,12 +71,8 @@ const CheckList = () => {
                   key={index}
                   item={item}
                   onRemove={() => {
-                    handleRemove(index);
+                    handleRemove(item);
                   }}
-                  onCheck={() => {
-                    handleCheck(index);
-                  }}
-                  isChecked={isChecked[index]}
                 ></Item>
               ))}
             </div>

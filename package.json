@@ -57,8 +57,11 @@
     "eslint-plugin-react": "^7.34.2",
     "prettier": "^3.2.5"
   },
+
+
   "rules": {
     "@typescript-eslint/no-unused-vars": "none"
   },
+
   "proxy": "http://192.168.0.53:8080"
 }
