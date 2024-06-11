@@ -37,7 +37,7 @@
   .index-travel-schedule-right {
     box-sizing: border-box;
     position: absolute;
-    width: 385px;
+    width: 450px;
     height: 400px;
     left: 15px;
     top: 550px;
@@ -51,7 +51,7 @@
 @media screen and (max-width: 512px) {
   .index-p-note {
     position: absolute;
-    width: 384px;
+    width: 450px;
     line-height: 46px;
     left: 5px;
     top: 10px;
@@ -69,7 +69,7 @@
     width: 0px;
     line-height: 45px;
     height: 10px;
-    left: 175px;
+    left: 225px;
     top: 29px;
 
     font-size: 10px;
@@ -82,8 +82,8 @@
     position: absolute;
     width: 400px;
     height: 400px;
-    left: 13px;
-    top: 13px;
+    left: 8px;
+    top: 0px;
 
     font-family: "Recursive";
     font-style: normal;
@@ -168,7 +168,7 @@
     position: absolute;
     width: 75px;
     height: 25px;
-    left: 330px;
+    left: 385px;
     top: 93px;
     font-weight: 550;
     border-radius: 10px;
