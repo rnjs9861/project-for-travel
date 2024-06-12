@@ -10,10 +10,13 @@ import TestPage from "./pages/TestPage";
 import SignupPage from "./pages/gmu/SignupPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
-import SignupPage from "./pages/gmu/SignupPage";
 import { UserInfoProvider } from "./context/UserInfoProvider";
-import Test from "./components/hwc/Test";
-
+import Calendars from "./components/gmu/Calendars";
+import CalendarsForAllPlan from "./components/gmu/CalendarsForAllPlan";
+import PlanPage from "./pages/gmu/PlanPage";
+import PlanModifyPage from "./pages/gmu/PlanModifyPage";
+import MyPage from "./components/gmu/MyPage";
+import EditProfile from "./components/gmu/EditProfile";
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);
@@ -31,6 +34,21 @@ function App() {
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />
           <Route path="/Test" element={<Test></Test>}></Route>
+
+          {/* GMU경로 */}
+          <Route path="/plan/:id" element={<Calendars></Calendars>} />
+          <Route
+            path="/allSchedule"
+            element={<CalendarsForAllPlan></CalendarsForAllPlan>}
+          />
+          <Route path="/plan" element={<PlanPage></PlanPage>} />
+          <Route path="/signup" element={<SignupPage></SignupPage>} />
+          <Route
+            path="/planModify/:id"
+            element={<PlanModifyPage></PlanModifyPage>}
+          />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/editmypage" element={<EditProfile />} />
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>

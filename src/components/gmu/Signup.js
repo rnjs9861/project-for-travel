@@ -1,13 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import ALOTlogo from "../../images/ALOTlogo.png";
 import { checkDuplicateId, postAccount } from "../../apis/gmu/signupApi";
-import styled from "@emotion/styled";
-import { userInfoContext } from "../../context/UserInfoProvider";
 
 const Signup = () => {
-  const { isUser } = useContext(userInfoContext);
-  console.log(isUser);
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
@@ -18,29 +15,33 @@ const Signup = () => {
   const [pwError, setPwError] = useState("");
   const [confirmPwError, setConfirmPwError] = useState("");
   const [idDuplicateError, setIdDuplicateError] = useState("");
-
   const [emailError, setEmailError] = useState("");
-
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const validateInput = (value, type) => {
-    const regEx = /^(?=.*\d).{5,}$/;
-    if (!regEx.test(value)) {
-      return `${type}는 5자 이상과 숫자가 포함되어야 합니다.`;
-    }
-    return "";
+  // 유효성 검사 함수
+  const validateId = (id) => {
+    const regEx = /^[a-zA-Z0-9]{6,12}$/;
+    return regEx.test(id);
   };
 
-  const validateEmail = email => {
+  const validatePassword = (password) => {
+    const regEx =
+      /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
+    return regEx.test(password);
+  };
+
+  const validateEmail = (email) => {
     const regEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regEx.test(email);
   };
 
-  const handleIdChange = async e => {
+  const handleIdChange = async (e) => {
     const newId = e.target.value;
     setUserId(newId);
 
-    const validationError = validateInput(newId, "ID");
+    const validationError = validateId(newId)
+      ? ""
+      : "아이디는 6~12 글자의 영문 대소문자와 숫자만 가능합니다.";
     setIdError(validationError);
 
     if (!validationError) {
@@ -59,16 +60,46 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async e => {
+  const handlePwChange = (e) => {
+    const newPw = e.target.value;
+    setUserPw(newPw);
+    setPwError(
+      validatePassword(newPw)
+        ? ""
+        : "비밀번호는 8~20 글자, 특수문자와 숫자를 포함해야 합니다."
+    );
+  };
+
+  const handleConfirmPwChange = (e) => {
+    const newConfirmPw = e.target.value;
+    setConfirmPw(newConfirmPw);
+    setConfirmPwError(
+      userPw === newConfirmPw ? "" : "비밀번호가 일치하지 않습니다."
+    );
+  };
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setUserEmail(newEmail);
+    setEmailError(
+      validateEmail(newEmail) ? "" : "올바른 이메일 형식이 아닙니다."
+    );
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const idValidationError = validateInput(userId, "ID");
-    const pwValidationError = validateInput(userPw, "비밀번호");
+    const idValidationError = validateId(userId)
+      ? ""
+      : "아이디는 6~12 글자의 영문 대소문자와 숫자만 가능합니다.";
+    const pwValidationError = validatePassword(userPw)
+      ? ""
+      : "비밀번호는 8~20 글자, 특수문자와 숫자를 포함해야 합니다.";
     const confirmPwValidationError =
-      userPw !== confirmPw ? "비밀번호가 일치하지 않습니다." : "";
-    const emailValidationError = !validateEmail(userEmail)
-      ? "올바른 이메일 형식이 아닙니다."
-      : "";
+      userPw === confirmPw ? "" : "비밀번호가 일치하지 않습니다.";
+    const emailValidationError = validateEmail(userEmail)
+      ? ""
+      : "올바른 이메일 형식이 아닙니다.";
 
     setIdError(idValidationError);
     setPwError(pwValidationError);
@@ -79,6 +110,7 @@ const Signup = () => {
       idValidationError ||
       pwValidationError ||
       confirmPwValidationError ||
+      emailValidationError ||
       idDuplicateError
     ) {
       return;
@@ -92,7 +124,9 @@ const Signup = () => {
     };
 
     try {
-      await postAccount(signupData);
+      const response = await postAccount(signupData);
+      const userId = response.user_id; // 서버로부터 받은 user_id
+      localStorage.setItem("user_id", userId); // 로컬 스토리지에 저장
       setShowSuccess(true);
     } catch (error) {
       console.log(error);
@@ -101,11 +135,6 @@ const Signup = () => {
 
   return (
     <Wrapper>
-      <Header>
-        <h1>
-          <img src={ALOTlogo} alt="로고" />
-        </h1>
-      </Header>
       <Container>
         <SignupForm onSubmit={handleSubmit}>
           <h1>회원가입</h1>
@@ -119,14 +148,7 @@ const Signup = () => {
           </InputField>
           <InputField>
             <Label>비밀번호</Label>
-            <Input
-              type="password"
-              value={userPw}
-              onChange={e => {
-                setUserPw(e.target.value);
-                setPwError(validateInput(e.target.value, "비밀번호"));
-              }}
-            />
+            <Input type="password" value={userPw} onChange={handlePwChange} />
             {pwError && <ErrorMessage>{pwError}</ErrorMessage>}
           </InputField>
           <InputField>
@@ -134,14 +156,7 @@ const Signup = () => {
             <Input
               type="password"
               value={confirmPw}
-              onChange={e => {
-                setConfirmPw(e.target.value);
-                setConfirmPwError(
-                  userPw !== e.target.value
-                    ? "비밀번호가 일치하지 않습니다."
-                    : "",
-                );
-              }}
+              onChange={handleConfirmPwChange}
             />
             {confirmPwError && <ErrorMessage>{confirmPwError}</ErrorMessage>}
           </InputField>
@@ -150,9 +165,7 @@ const Signup = () => {
             <Input
               type="email"
               value={userEmail}
-              onChange={e => {
-                setUserEmail(e.target.value);
-              }}
+              onChange={handleEmailChange}
             />
             {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
           </InputField>
@@ -161,7 +174,7 @@ const Signup = () => {
             <Input
               type="text"
               value={userName}
-              onChange={e => setUserName(e.target.value)}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </InputField>
           <Button type="submit">회원가입</Button>
