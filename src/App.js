@@ -8,7 +8,6 @@ import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
 import SignupPage from "./pages/gmu/SignupPage";
 import { UserInfoProvider } from "./context/UserInfoProvider";
-import SignupPage from "./pages/gmu/SignupPage";
 
 function App() {
   return (
@@ -22,7 +21,6 @@ function App() {
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>
-
   );
 }
 
