@@ -1,33 +1,28 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "../../css/ldh/login/header.css";
 import "../../css/ldh/login/main.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { postLogin } from "../../apis/ldh/apiuser";
+import { userInfoContext } from "../../context/UserInfoProvider";
 
 const LogIn = () => {
+  const { isUser, setIsUser } = useContext(userInfoContext);
+  const navi = useNavigate();
   const [isId, setIsId] = useState("");
   const [isPass, setIsPass] = useState("");
   const noneId = useRef(null);
   const nonePass = useRef(null);
-  const noneUser = useRef(null);
   const cleanPass = useRef(null);
   const cleanId = useRef(null);
 
-  const userInfo = [
-    {
-      userid: "dlehgus",
-      userpass: "1",
-    },
-    {
-      userid: "ehgus",
-      userpass: "2",
-    },
-  ];
   const cleanUpId = () => {
     setIsId("");
   };
   const cleanUpPass = () => {
     setIsPass("");
   };
-  const handleOnSubmit = e => {
+  const handleOnSubmit = async e => {
     e.preventDefault();
     if (!isId) {
       noneId.current.style.display = "block";
@@ -41,17 +36,19 @@ const LogIn = () => {
     } else {
       nonePass.current.style.display = "none";
     }
-    const user = userInfo.find(
-      item => item.userid === isId && item.userpass === isPass,
-    );
-    if (!user) {
-      noneUser.current.style.display = "block";
-    } else {
-      noneUser.current.style.display = "none";
-      // alert("로그인되었습니다");
-      // console.log(user);
-      // 화면전환하며 값 넘길코드 작성, 작업하며 윗 코드 삭제
+    const reqData = {
+      uid: isId,
+      upw: isPass,
+    };
+    const result = await postLogin(reqData);
+    if (result.statusCode === "OK") {
+      alert("aaa");
+      console.log(result.resultData.userId);
+      console.log(isUser);
+      setIsUser(result.resultData.userId);
+      localStorage.setItem("user", result.resultData.userId);
     }
+    // navi("/checklist");
   };
 
   useEffect(() => {
@@ -135,9 +132,7 @@ const LogIn = () => {
                   <span className="none-password" ref={nonePass}>
                     비밀번호를 입력해 주세요
                   </span>
-                  <span className="none-user" ref={noneUser}>
-                    아이디 또는 비밀번호를 잘못 입력하셨습니다
-                  </span>
+                  <span className="none-user"></span>
                 </div>
                 <button className="button">로그인</button>
               </form>

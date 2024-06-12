@@ -1,7 +1,7 @@
-import React from "react";
+import "../../images/ALOTlogo.png";
 
 const Header = () => {
-  return <div>Header</div>;
+  return <>title</>;
 };
 
 export default Header;
