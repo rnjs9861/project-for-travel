@@ -6,7 +6,7 @@ import "./css/reset.css";
 import TestPage from "./pages/TestPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
-
+import SignupPage from "./pages/gmu/SignupPage";
 import { UserInfoProvider } from "./context/UserInfoProvider";
 import SignupPage from "./pages/gmu/SignupPage";
 
@@ -16,13 +16,13 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<TestPage></TestPage>}></Route>
           <Route path="/login" element={<LogIn />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>
+
   );
 }
 
