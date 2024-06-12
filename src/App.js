@@ -8,6 +8,7 @@ import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
 import SignupPage from "./pages/gmu/SignupPage";
 import { UserInfoProvider } from "./context/UserInfoProvider";
+import Test from "./components/hwc/Test";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<LogIn />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />
+          <Route path="/Test" element={<Test></Test>}></Route>
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>

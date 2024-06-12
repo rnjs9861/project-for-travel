@@ -31,9 +31,9 @@
   text-align: center;
   box-shadow: 3px 3px 3px black;
   position: absolute;
-  width: 115px;
+  width: 140px;
   height: 42px;
-  left: 555px;
+  left: 535px;
   top: 130px;
 
   font-family: "Recursive";
@@ -73,10 +73,12 @@
 
 .index-left-selection {
   box-sizing: border-box;
-
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
   position: absolute;
   width: 300px;
-  height: 450px;
+  height: 500px;
   left: 64px;
   top: 260px;
   box-shadow: 3px 3px 3px black;
@@ -87,10 +89,11 @@
 }
 
 .index-travel-schedule {
+  overflow: hidden;
   box-sizing: border-box;
   position: absolute;
   width: 240px;
-  height: 395px;
+  height: 445px;
   left: 30px;
   top: 27px;
   background: #c3fdde;
@@ -101,34 +104,82 @@
 .index-p-note {
   position: absolute;
   width: 100px;
-  line-height: 75px;
-  left: 10px;
-  top: -7px;
-}
-.index-detail {
-  position: absolute;
-  width: 200px;
-  line-height: 75px;
-  height: 50px;
+  line-height: 88px;
   left: 10px;
   top: 20px;
+}
+.index-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* 각 입력 상자 간의 간격 */
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  padding: 0;
+  margin: 0;
+}
 
-  color: #9c9595;
+.index-detail li {
+  display: flex;
+  align-items: center; /* 아이템들을 세로로 정렬 */
+  height: 40px; /* 모든 li 요소의 높이를 동일하게 설정 */
+}
+
+.index-detail input,
+.index-detail select,
+.index-detail span {
+  flex: 1; /* 입력 상자와 저장값의 크기를 동일하게 설정 */
+  height: 100%; /* 입력 상자와 span의 높이를 li 요소에 맞춤 */
+  box-sizing: border-box; /* 패딩과 보더 포함한 박스 크기 */
+  padding: 8px; /* 패딩을 추가하여 내부 여백 설정 */
+  border: 1px solid #ccc; /* 박스 테두리 설정 */
+  border-radius: 4px; /* 박스 모서리 둥글게 설정 */
+  background-color: #fff; /* 박스 배경 색상 설정 */
+}
+
+.index-detail span {
+  display: flex;
+  align-items: center; /* span 요소 내 텍스트를 가운데 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  background-color: #f9f9f9; /* 저장된 값의 배경 색상 설정 */
 }
 
 .index-right-selection {
   box-sizing: border-box;
   box-shadow: 3px 3px 3px black;
-
   position: absolute;
   width: 410px;
   height: 600px;
   left: 400px;
   top: 185px;
-
   background: #88f286;
   border: 1px solid #000000;
   border-radius: 10px;
+  padding: 20px;
+  z-index: 1; /* z-index를 1로 설정 */
+}
+
+.index-schedule-details {
+  margin-top: 20px;
+  position: relative;
+  z-index: 2; /* z-index를 더 높게 설정하여 앞쪽에 노출 */
+  background: #c3fdde;
+  padding: 15px;
+  border-radius: 5px;
+  top: 190px;
+  left: 455px;
+  width: 300px;
+}
+
+.index-schedule-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.index-schedule-details li {
+  margin-bottom: 30px;
+  padding: 10px;
+  border: 1px solid #000;
+  background: #f0f0f0;
+  border-radius: 45px;
 }
 
 .index-travel-schedule-right {
