@@ -6,9 +6,8 @@ import TestPage from "./pages/TestPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
 import Header from "./components/layout/Header";
-
 import SignupPage from "./pages/gmu/SignupPage";
-
+import Test from "./components/hwc/Test";
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
         <Route path="/checklist" element={<CheckList></CheckList>}></Route>
         <Route path="/login" element={<LogIn></LogIn>}></Route>
         <Route path="/signup" element={<SignupPage></SignupPage>} />
+        <Route path="/" element={<Test></Test>} />
       </Routes>
     </BrowserRouter>
   );

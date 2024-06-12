@@ -17,6 +17,7 @@ const Test = () => {
   });
 
   const [isEditing, setIsEditing] = useState(true);
+  const [showDetail, setShowDetail] = useState(true);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -48,13 +49,30 @@ const Test = () => {
     setIsEditing(true);
   };
 
+  const handleDelete = () => {
+    setSchedule({
+      date: "",
+      title: "",
+      amount: "",
+      startTime: "",
+      endTime: "",
+      details: "",
+    });
+    console.log("삭제된 일정");
+  };
+
+  const handleDeleteDetail = () => {
+    setShowDetail(false);
+  };
+
   const style = {
     background: "linear-gradient(to right, #2bc0e4, #eaecc6)",
-    minHeight: "100vh", // 페이지 전체에 배경을 적용하기 위해 최소 높이 설정
+    minHeight: "100vh",
   };
 
   return (
     <div style={style}>
+      {showDetail && <DetilePages schedule={schedule} />}
       <DetilePages />
       <DModifyPages
         schedule={schedule}
@@ -67,7 +85,7 @@ const Test = () => {
         onReset={handleReset}
         isEditing={isEditing}
       />
-      <SchedulePages />
+      <SchedulePages schedule={schedule} />
     </div>
   );
 };
