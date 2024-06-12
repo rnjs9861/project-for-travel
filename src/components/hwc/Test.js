@@ -21,8 +21,8 @@ const Test = () => {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setSchedule(prevSttate => ({
-      ...prevSttate,
+    setSchedule(prevState => ({
+      ...prevState,
       [name]: value,
     }));
   };
@@ -58,11 +58,8 @@ const Test = () => {
       endTime: "",
       details: "",
     });
-    console.log("삭제된 일정");
-  };
-
-  const handleDeleteDetail = () => {
     setShowDetail(false);
+    console.log("삭제된 일정");
   };
 
   const style = {
@@ -72,8 +69,9 @@ const Test = () => {
 
   return (
     <div style={style}>
-      {showDetail && <DetilePages schedule={schedule} />}
-      <DetilePages />
+      {showDetail && (
+        <DetilePages schedule={schedule} onDelete={handleDelete} />
+      )}
       <DModifyPages
         schedule={schedule}
         onChange={handleChange}

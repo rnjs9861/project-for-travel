@@ -83,9 +83,6 @@ const DModifyPages = ({ schedule, onChange, isEditing }) => (
                   <span>{schedule.title}</span>
                 </li>
                 <li>
-                  <span>{schedule.details}</span>
-                </li>
-                <li>
                   <span>{schedule.amount}</span>
                 </li>
               </>

@@ -56,17 +56,44 @@
     width: 385px;
     height: 280px;
     left: 20px;
-    top: 525px;
+    top: 575px;
     background: #88f286;
     border: 1px solid #000000;
     border-radius: 10px;
   }
+
+  .index-schedule-details {
+    margin-top: 0px;
+    position: relative;
+    z-index: 2; /* z-index를 더 높게 설정하여 앞쪽에 노출 */
+    border-radius: 5px;
+    top: 500px;
+    left: 50px;
+    width: 300px;
+    height: 300px;
+  }
+
+  .index-schedule-details ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 40px;
+    margin-bottom: 10px;
+  }
+
+  .index-schedule-details li {
+    margin-bottom: 30px;
+    padding: 3px;
+    border: 1px solid #000;
+    background: #f0f0f0;
+    border-radius: 45px;
+  }
   .index-left-selection {
     position: absolute;
-    width: 385px;
+    width: 330px;
     height: 265px;
     left: 20px;
-    top: 200px;
+    top: 230px;
     background: #88f286;
     border: 1px solid #000000;
     border-radius: 10px;
@@ -74,7 +101,7 @@
 
   .index-travel-schedule {
     position: absolute;
-    width: 355px;
+    width: 300px;
     height: 245px;
     left: 15px;
     top: 10px;
@@ -102,11 +129,12 @@
   .index-detail {
     position: absolute;
     width: 100px;
-    line-height: 45.5px;
+    line-height: 20px;
     height: 10px;
     left: 140px;
+    gap: 9px;
     top: 7px;
-    font-size: 15px;
+    font-size: 10.5px;
     color: #9c9595;
   }
 
@@ -141,13 +169,13 @@
 
   .index-schedule-input {
     left: 25px;
-    top: 160px;
+    top: 190px;
     background: #2bc0e4;
   }
 
   .index-detail-input {
     left: 25px;
-    top: 485px;
+    top: 535px;
     background-color: #2bc0e4;
   }
 }
