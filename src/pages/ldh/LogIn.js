@@ -6,13 +6,15 @@ import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../apis/ldh/apiuser";
 import { userInfoContext } from "../../context/UserInfoProvider";
 
-const LogIn = () => {
+const LogIn = ({ setOnHeader }) => {
   const { isUser, setIsUser } = useContext(userInfoContext);
   const navi = useNavigate();
   const [isId, setIsId] = useState("");
   const [isPass, setIsPass] = useState("");
-  const noneId = useRef(null);
-  const nonePass = useRef(null);
+  const [noneId, setNoneId] = useState("");
+  const [nonePass, setNonePass] = useState("");
+  // const noneId = useRef(null);
+  // const nonePass = useRef(null);
   const cleanPass = useRef(null);
   const cleanId = useRef(null);
 
@@ -24,34 +26,34 @@ const LogIn = () => {
   };
   const handleOnSubmit = async e => {
     e.preventDefault();
-    if (!isId) {
-      noneId.current.style.display = "block";
-      return false;
-    } else {
-      noneId.current.style.display = "none";
-    }
-    if (!isPass) {
-      nonePass.current.style.display = "block";
-      return false;
-    } else {
-      nonePass.current.style.display = "none";
-    }
     const reqData = {
       uid: isId,
       upw: isPass,
     };
     const result = await postLogin(reqData);
-    if (result.statusCode === "OK") {
+    if (result.statusCode === 1) {
       alert("aaa");
       console.log(result.resultData.userId);
+      console.log(result.resultMsg);
       console.log(isUser);
       setIsUser(result.resultData.userId);
       localStorage.setItem("user", result.resultData.userId);
+      setOnHeader(true);
     }
-    // navi("/checklist");
+    if (result.statusCode === -1) {
+      console.log(result.resultMsg);
+      setNoneId(result.resultMsg);
+    }
+    if (result.statusCode === -2) {
+      console.log(result.resultMsg);
+      setNonePass(result.resultMsg);
+    }
   };
 
   useEffect(() => {
+    setOnHeader(false);
+    setNoneId("");
+    setNonePass("");
     isId
       ? (cleanId.current.style.display = "block")
       : (cleanId.current.style.display = "none");
@@ -126,13 +128,8 @@ const LogIn = () => {
                   />
                 </div>
                 <div className="message-inner">
-                  <span className="none-id" ref={noneId}>
-                    아이디를 입력해 주세요
-                  </span>
-                  <span className="none-password" ref={nonePass}>
-                    비밀번호를 입력해 주세요
-                  </span>
-                  <span className="none-user"></span>
+                  <span className="none-id">{noneId}</span>
+                  <span className="none-password">{nonePass}</span>
                 </div>
                 <button className="button">로그인</button>
               </form>

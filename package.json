@@ -60,5 +60,5 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "none"
   },
-  "proxy": "http://192.168.0.53:8080"
+  "proxy": "http://192.168.0.144:5114"
 }
