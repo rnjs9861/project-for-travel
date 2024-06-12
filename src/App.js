@@ -10,6 +10,9 @@ import TestPage from "./pages/TestPage";
 import SignupPage from "./pages/gmu/SignupPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
+import SignupPage from "./pages/gmu/SignupPage";
+import { UserInfoProvider } from "./context/UserInfoProvider";
+
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);

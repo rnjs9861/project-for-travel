@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import ALOTlogo from "../../images/ALOTlogo.png";
 import { checkDuplicateId, postAccount } from "../../apis/gmu/signupApi";
 import styled from "@emotion/styled";
+import { userInfoContext } from "../../context/UserInfoProvider";
 
 const Signup = () => {
+  const { isUser } = useContext(userInfoContext);
+  console.log(isUser);
   const [userId, setUserId] = useState("");
   const [userPw, setUserPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
