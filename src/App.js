@@ -10,7 +10,6 @@ import TestPage from "./pages/TestPage";
 import SignupPage from "./pages/gmu/SignupPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
-import { UserInfoProvider } from "./context/UserInfoProvider";
 import Calendars from "./components/gmu/Calendars";
 import CalendarsForAllPlan from "./components/gmu/CalendarsForAllPlan";
 import PlanPage from "./pages/gmu/PlanPage";

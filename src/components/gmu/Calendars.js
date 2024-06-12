@@ -32,7 +32,7 @@ const Calendars = () => {
     const loadEvents = async () => {
       try {
         const events = await getAllEvents(tourId);
-        setEvents((prevEvents) => [...prevEvents, ...events]);
+        setEvents(prevEvents => [...prevEvents, ...events]);
       } catch (error) {
         console.error("Error loading events:", error);
       }
@@ -43,7 +43,7 @@ const Calendars = () => {
   useEffect(() => {
     if (selectedDate) {
       const filteredEvents = events.filter(
-        (event) => event.start.split("T")[0] === selectedDate
+        event => event.start.split("T")[0] === selectedDate,
       );
       const sortedEvents = filteredEvents.sort((a, b) => {
         const aTime = new Date(a.start).getTime();
@@ -54,17 +54,17 @@ const Calendars = () => {
     }
   }, [selectedDate, events]);
 
-  const handleDateClick = (info) => {
+  const handleDateClick = info => {
     setSelectedDate(info.dateStr);
   };
 
-  const handleEventSubmit = (event) => {
+  const handleEventSubmit = event => {
     const formattedEvent = {
       ...event,
       start: `${event.date}T${event.start}`,
       end: `${event.date}T${event.end}`,
     };
-    setEvents((prevEvents) => [...prevEvents, formattedEvent]);
+    setEvents(prevEvents => [...prevEvents, formattedEvent]);
   };
 
   return (
