@@ -1,17 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Item from "../../components/ldh/Item";
 import ListInput from "../../components/ldh/ListInput";
 import "../../css/ldh/checklist/main-bottom.css";
 import "../../css/ldh/checklist/main-top.css";
 import "../../css/ldh/checklist/main.css";
+import { userInfoContext } from "../../context/UserInfoProvider";
 
 const CheckList = () => {
+  const { isUser } = useContext(userInfoContext);
   const [onAdd, setOnAdd] = useState("");
   const [message, setMessage] = useState("");
   const [list, setList] = useState([]);
   const [isChecked, setIsChecked] = useState([]);
-
+  console.log(isUser);
   const handleOnSubmit = e => {
     e.preventDefault();
     if (onAdd === "") {
@@ -24,13 +26,13 @@ const CheckList = () => {
       setMessage("");
     }
     const reqData = {
-      tour_id: 3,
+      tourId: 1,
+      // 목록개수 : 숫자,
+      // boolean: true,
       title: onAdd,
     };
-    // console.log(reqData);
     postList(reqData);
   };
-
   const postList = async data => {
     try {
       const response = await axios.post("/api/tour/checklist", data);
@@ -49,9 +51,6 @@ const CheckList = () => {
     setIsChecked(checked);
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
   return (
     <main className="main">
       <div className="main-wrap">
