@@ -6,7 +6,7 @@ const ModifyText = ({ onSave, onEdit, onReset, isEditing }) => {
       {isEditing ? (
         <>
           <button type="button" className="index-foor-back" onClick={onReset}>
-            뒤로 가기
+            삭제
           </button>
           <button type="submit" className="index-page-save">
             저장
