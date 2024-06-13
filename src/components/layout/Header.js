@@ -1,12 +1,56 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import "../../css/ldh/header/header.css";
+import { useNavigate } from "react-router-dom";
+import { userInfoContext } from "../../context/UserInfoProvider";
 
 const Header = ({ onheader }) => {
-  const [aaa, setAaa] = useState(false);
-  const aaa1 = () => {
-    setAaa(true);
+  const [onNavi, setOnNavi] = useState("");
+  const [authStatus, setAuthStatus] = useState("");
+  const [authUser, setAuthUser] = useState("");
+  const [authLogin, setAuthLogin] = useState(false);
+  const { isUser, setIsUser } = useContext(userInfoContext);
+  const navigate = useNavigate();
+  const handleNavi = (navi, path) => {
+    if (isUser) {
+      setAuthLogin(true);
+      setOnNavi(navi);
+      navigate(path);
+    } else {
+      setAuthLogin(false);
+      navigate("/login");
+    }
   };
+  const handleAuth = () => {
+    if (isUser) {
+      setIsUser("");
+      sessionStorage.setItem("user", "");
+      handleNavi("홈", "/");
+    }
+    if (!isUser) {
+      handleNavi("회원가입", "/signup");
+    }
+  };
+  const handleStatus = () => {
+    if (isUser) {
+      handleNavi("내정보", "/mypage");
+    }
+    if (!isUser) {
+      handleNavi("로그인", "/login");
+    }
+  };
+  useEffect(() => {
+    if (isUser) {
+      setAuthStatus("내정보");
+      setAuthUser("로그아웃");
+    }
+    if (!isUser) {
+      setAuthStatus("로그인");
+      setAuthUser("회원가입");
+    }
+  }, [isUser]);
+
   return onheader ? (
-    <body>
+    <>
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           <div className="navbar-header">
@@ -14,28 +58,81 @@ const Header = ({ onheader }) => {
               <img
                 src="/www/images/KakaoTalk_20240607_150139849.jpg"
                 className="alotimg"
+                onClick={() => {
+                  handleNavi(null, "/");
+                }}
               />
             </a>
+            <ul className="nav navbar-nav">
+              <li className={onNavi === "plan" ? "active" : ""}>
+                <a
+                  href="#"
+                  onClick={() => {
+                    handleNavi("plan", "/plan");
+                  }}
+                >
+                  계획세우기
+                </a>
+              </li>
+              <li className={onNavi === "calendar" ? "active" : ""}>
+                <a
+                  href="#"
+                  onClick={() => {
+                    handleNavi("calendar", "/allSchedule");
+                  }}
+                >
+                  캘린더
+                </a>
+              </li>
+              <li className={onNavi === "detail" ? "active" : ""}>
+                <a
+                  href="#"
+                  onClick={() => {
+                    handleNavi("detail", "/detail");
+                  }}
+                >
+                  상세계획
+                </a>
+              </li>
+              <li className={onNavi === "checklist" ? "active" : ""}>
+                <a
+                  href="#"
+                  onClick={() => {
+                    handleNavi("checklist", "/checklist");
+                  }}
+                >
+                  체크리스트
+                </a>
+              </li>
+            </ul>
           </div>
-          <ul className="nav navbar-nav">
-            <li className="active">
-              <a href="#">계획세우기</a>
-            </li>
-            <li>
-              <a href="#" onClick={() => aaa1()}>
-                캘린더
+          <ul className="usernav">
+            <li className="usernav-left">
+              <a
+                href="#"
+                className="usernav-left-content navbar-brand"
+                onClick={() => {
+                  handleStatus();
+                }}
+              >
+                {authStatus}
               </a>
             </li>
-            <li>
-              <a href="#">상세계획</a>
-            </li>
-            <li>
-              <a href="#">체크리스트</a>
+            <li className="usernav-right">
+              <a
+                href="#"
+                className="usernav-right-content navbar-brand"
+                onClick={() => {
+                  handleAuth();
+                }}
+              >
+                {authUser}
+              </a>
             </li>
           </ul>
         </div>
       </nav>
-    </body>
+    </>
   ) : null;
 };
 

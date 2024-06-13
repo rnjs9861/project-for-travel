@@ -1,20 +1,17 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import "../../css/ldh/login/header.css";
-import "../../css/ldh/login/main.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { postLogin } from "../../apis/ldh/apiuser";
 import { userInfoContext } from "../../context/UserInfoProvider";
+import "../../css/ldh/login/header.css";
+import "../../css/ldh/login/main.css";
 
 const LogIn = ({ setOnHeader }) => {
-  const { isUser, setIsUser } = useContext(userInfoContext);
+  const { setIsUser } = useContext(userInfoContext);
   const navi = useNavigate();
   const [isId, setIsId] = useState("");
   const [isPass, setIsPass] = useState("");
   const [noneId, setNoneId] = useState("");
   const [nonePass, setNonePass] = useState("");
-  // const noneId = useRef(null);
-  // const nonePass = useRef(null);
   const cleanPass = useRef(null);
   const cleanId = useRef(null);
 
@@ -32,20 +29,15 @@ const LogIn = ({ setOnHeader }) => {
     };
     const result = await postLogin(reqData);
     if (result.statusCode === 1) {
-      alert("aaa");
-      console.log(result.resultData.userId);
-      console.log(result.resultMsg);
-      console.log(isUser);
       setIsUser(result.resultData.userId);
       localStorage.setItem("user", result.resultData.userId);
       setOnHeader(true);
+      navi("/");
     }
     if (result.statusCode === -1) {
-      console.log(result.resultMsg);
       setNoneId(result.resultMsg);
     }
     if (result.statusCode === -2) {
-      console.log(result.resultMsg);
       setNonePass(result.resultMsg);
     }
   };
@@ -68,7 +60,14 @@ const LogIn = ({ setOnHeader }) => {
       <header className="header">
         <div className="header-inner">
           <div className="header-inner-home">
-            <span>홈으로</span>
+            <span
+              onClick={() => {
+                navi("/");
+                setOnHeader(true);
+              }}
+            >
+              홈으로
+            </span>
           </div>
         </div>
       </header>
