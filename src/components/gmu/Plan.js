@@ -15,6 +15,8 @@ const Plan = () => {
   const [tourBudget, setTourBudget] = useState("");
   const [mapCenter, setMapCenter] = useState([37.5665, 126.978]);
 
+  const { userId } = useParams();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,40 +24,41 @@ const Plan = () => {
       if (tourLocation) {
         axios
           .get(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${tourLocation}`
+            `https://nominatim.openstreetmap.org/search?format=json&q=${tourLocation}`,
           )
-          .then((response) => {
+          .then(response => {
             const data = response.data;
             if (data && data.length > 0) {
               const { lat, lon } = data[0];
               setMapCenter([lat, lon]);
             }
           })
-          .catch((error) => console.log(error));
+          .catch(error => console.log(error));
       }
     }, 500);
 
     return () => clearTimeout(timerId);
   }, [tourLocation]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    const userId = localStorage.getItem("user_id"); // 로컬 스토리지에서 user_id 가져오기
+    const userId = localStorage.getItem("user"); // 로컬 스토리지에서 user_id 가져오기
     if (!userId) {
       alert("로그인 정보가 없습니다. 다시 로그인 해주세요."); //navi로 로그인으로 이동시키기
       return;
     }
 
     const writeData = {
-      userId, //user DB의 pk
-
-      tourTitle: tourTitle,
+      userId: userId, //user DB의 pk
+      title: tourTitle,
+      tourLocation,
       tourStartDay,
       tourFinishDay,
-      tourLocation,
+      tourColor: "#FFFFFF",
       tourBudget,
     };
+    console.log(userId);
 
     try {
       const planData = await postPlan(writeData);
@@ -83,7 +86,7 @@ const Plan = () => {
                   name="tourTitle"
                   placeholder="여행 계획 제목을 입력하세요"
                   value={tourTitle}
-                  onChange={(e) => setTourTitle(e.target.value)}
+                  onChange={e => setTourTitle(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -96,17 +99,17 @@ const Plan = () => {
                   name="tourLocation"
                   placeholder="목적지를 입력하세요"
                   value={tourLocation}
-                  onChange={(e) => {
+                  onChange={e => {
                     setTourLocation(e.target.value);
                     fetch(`/search?format=json&q=${e.target.value}`)
-                      .then((response) => response.json())
-                      .then((data) => {
+                      .then(response => response.json())
+                      .then(data => {
                         if (data && data.length > 0) {
                           const { lat, lon } = data[0];
                           setMapCenter([lat, lon]);
                         }
                       })
-                      .catch((error) => console.log(error));
+                      .catch(error => console.log(error));
                   }}
                   required
                 />
@@ -122,7 +125,7 @@ const Plan = () => {
                   id="tourStartDay"
                   name="tourStartDay"
                   value={tourStartDay}
-                  onChange={(e) => setTourStartDay(e.target.value)}
+                  onChange={e => setTourStartDay(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -134,7 +137,7 @@ const Plan = () => {
                   id="tourFinishDay"
                   name="tourFinishDay"
                   value={tourFinishDay}
-                  onChange={(e) => setTourFinishDay(e.target.value)}
+                  onChange={e => setTourFinishDay(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -147,7 +150,7 @@ const Plan = () => {
                   name="tourBudget"
                   placeholder="예산을 입력하세요"
                   value={tourBudget}
-                  onChange={(e) => setTourBudget(e.target.value)}
+                  onChange={e => setTourBudget(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -218,7 +221,9 @@ const RightSection = styled.div`
   z-index: 100000;
   transform: translateX(100%);
   opacity: 0;
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transition:
+    transform 0.5s ease-in-out,
+    opacity 0.5s ease-in-out;
   animation: slideIn 0.5s ease-in-out 0.1s forwards;
 
   @keyframes slideIn {
