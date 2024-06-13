@@ -28,7 +28,7 @@ function App() {
             path="/login"
             element={<LogIn setOnHeader={setOnHeader} />}
           ></Route>
-          <Route path="/" element={<TestPage />}></Route>
+          <Route path="/testpage" element={<TestPage />}></Route>
           <Route path="/test" element={<Test />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />

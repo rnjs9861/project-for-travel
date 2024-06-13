@@ -2,7 +2,7 @@
   position: absolute;
   width: 115px;
   height: 42px;
-  left: 155px;
+  left: 190px;
   top: 130px;
 
   font-family: "Recursive";
@@ -59,8 +59,8 @@
   position: absolute;
   width: 228px;
   height: 48px;
-  left: 300px;
-  top: 50px;
+  left: 130px;
+  top: 110px;
 
   justify-content: center;
   text-align: center;
@@ -79,7 +79,7 @@
   position: absolute;
   width: 300px;
   height: 500px;
-  left: 64px;
+  left: 100px;
   top: 260px;
   box-shadow: 3px 3px 3px black;
 
@@ -142,46 +142,6 @@
   background-color: #f9f9f9; /* 저장된 값의 배경 색상 설정 */
 }
 
-.index-right-selection {
-  box-sizing: border-box;
-  box-shadow: 3px 3px 3px black;
-  position: absolute;
-  width: 410px;
-  height: 600px;
-  left: 400px;
-  top: 185px;
-  background: #88f286;
-  border: 1px solid #000000;
-  border-radius: 10px;
-  padding: 20px;
-  z-index: 1; /* z-index를 1로 설정 */
-}
-
-.index-schedule-details {
-  margin-top: 20px;
-  position: relative;
-  z-index: 2; /* z-index를 더 높게 설정하여 앞쪽에 노출 */
-  background: #c3fdde;
-  padding: 15px;
-  border-radius: 5px;
-  top: 190px;
-  left: 455px;
-  width: 300px;
-}
-
-.index-schedule-details ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.index-schedule-details li {
-  margin-bottom: 30px;
-  padding: 10px;
-  border: 1px solid #000;
-  background: #f0f0f0;
-  border-radius: 45px;
-}
-
 .index-travel-schedule-right {
   box-sizing: border-box;
   position: absolute;
@@ -216,8 +176,8 @@
   position: absolute;
   width: 75px;
   height: 25px;
-  left: 70px;
-  top: 65px;
+  left: 10px;
+  top: 105px;
   font-weight: 550;
   box-shadow: 2px 2px 2px black;
 
@@ -232,8 +192,8 @@
   position: absolute;
   width: 75px;
   height: 25px;
-  left: 730px;
-  top: 65px;
+  left: 400px;
+  top: 105px;
   font-weight: 550;
   border-radius: 10px;
   box-shadow: 1.5px 1.5px 1.5px black;
