@@ -20,7 +20,7 @@ const CalendarsForAllPlan = () => {
         const plans = await getAllPlans();
 
         // 여행 계획을 events 형식으로 변환
-        const planEvents = plans.map((plan) => ({
+        const planEvents = plans.map(plan => ({
           title: plan.tourTitle,
           start: plan.tourStartDay,
           end: plan.tourFinishDay,
@@ -30,7 +30,7 @@ const CalendarsForAllPlan = () => {
         }));
 
         setEvents([
-          ...events.map((event) => ({
+          ...events.map(event => ({
             ...event,
             start: `${event.date}T${event.start}`,
             end: `${event.date}T${event.end}`,
@@ -48,7 +48,7 @@ const CalendarsForAllPlan = () => {
   useEffect(() => {
     if (selectedDate) {
       const filteredEvents = events.filter(
-        (event) => event.start.split("T")[0] === selectedDate
+        event => event.start.split("T")[0] === selectedDate,
       );
       const sortedEvents = filteredEvents.sort((a, b) => {
         const aTime = new Date(a.start).getTime();
@@ -59,15 +59,15 @@ const CalendarsForAllPlan = () => {
     }
   }, [selectedDate, events]);
 
-  const handleDateClick = (info) => {
+  const handleDateClick = info => {
     setSelectedDate(info.dateStr);
   };
 
   return (
     <>
-      <Header>
+      {/* <Header>
         <img src={ALOTlogo} alt="로고" />
-      </Header>
+      </Header> */}
       <Body>
         <CalendarContainer>
           <Calendar>

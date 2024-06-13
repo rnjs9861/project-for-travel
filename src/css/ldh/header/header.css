@@ -1,0 +1,24 @@
+.alotimg {
+  width: 100%;
+  height: 150%;
+}
+.usernav {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 10px;
+}
+.usernav-left :hover {
+  text-decoration: none;
+  color: #000;
+}
+.usernav-right :hover {
+  text-decoration: none;
+  color: #000;
+}
+.usernav-left-content {
+  color: #777;
+}
+.usernav-right-content {
+  color: #777;
+}
