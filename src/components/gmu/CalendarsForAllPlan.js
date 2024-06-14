@@ -68,47 +68,47 @@ const CalendarsForAllPlan = () => {
       {/* <Header>
         <img src={ALOTlogo} alt="로고" />
       </Header> */}
-      <Body>
-        <CalendarContainer>
-          <Calendar>
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              dateClick={handleDateClick}
-              events={events}
-            />
-          </Calendar>
+      {/* <Body> */}
+      <CalendarContainer>
+        <Calendar>
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            dateClick={handleDateClick}
+            events={events}
+          />
+        </Calendar>
 
-          <EventModalWrap>
-            {selectedDate && (
-              <>
-                <SelectedDate>{selectedDate} 일정</SelectedDate>
-                {selectedEvents.map((event, index) => (
-                  <EventSummary key={index}>
-                    <strong>{event.title}</strong>
-                    <br />
-                    {event.extendedProps?.type === "plan" ? (
-                      <>
-                        <p>시작: {event.start.split("T")[0]}</p>
-                        <p>끝: {event.end.split("T")[0]}</p>
-                      </>
-                    ) : (
-                      <>
-                        <p>
-                          시간: {event.start.split("T")[1]} -{" "}
-                          {event.end.split("T")[1]}
-                        </p>
-                        <p>설명: {event.description}</p>
-                        <p>비용: {event.expense}</p>
-                      </>
-                    )}
-                  </EventSummary>
-                ))}
-              </>
-            )}
-          </EventModalWrap>
-        </CalendarContainer>
-      </Body>
+        <EventModalWrap>
+          {selectedDate && (
+            <>
+              <SelectedDate>{selectedDate} 일정</SelectedDate>
+              {selectedEvents.map((event, index) => (
+                <EventSummary key={index}>
+                  <strong>{event.title}</strong>
+                  <br />
+                  {event.extendedProps?.type === "plan" ? (
+                    <>
+                      <p>시작: {event.start.split("T")[0]}</p>
+                      <p>끝: {event.end.split("T")[0]}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        시간: {event.start.split("T")[1]} -{" "}
+                        {event.end.split("T")[1]}
+                      </p>
+                      <p>설명: {event.description}</p>
+                      <p>비용: {event.expense}</p>
+                    </>
+                  )}
+                </EventSummary>
+              ))}
+            </>
+          )}
+        </EventModalWrap>
+      </CalendarContainer>
+      {/* </Body> */}
     </>
   );
 };
@@ -132,9 +132,9 @@ const Header = styled.header`
   }
 `;
 
-const Body = styled.div`
-  padding-top: 180.24px;
-`;
+// const Body = styled.div`
+//   padding-top: 180.24px;
+// `;
 
 const CalendarContainer = styled.div`
   display: flex;
