@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { saveEvent } from "../../apis/gmu/planCalendar";
+import { saveEvent } from "../../apis/gmu/planApi";
 
 const EventModal = ({ date, onSubmit, event, tourId }) => {
   const [title, setTitle] = useState("");
@@ -13,8 +13,8 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
   useEffect(() => {
     if (event) {
       setTitle(event.title || "");
-      setStartTime(event.start || "");
-      setEndTime(event.end || "");
+      setStartTime(event.start.split("T")[1] || ""); // 시간을 설정
+      setEndTime(event.end.split("T")[1] || ""); // 시간을 설정
       setDescription(event.description || "");
       setExpense(event.expense || 0);
     }
@@ -22,27 +22,34 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
 
   const handleSubmit = async () => {
     const newEvent = {
-      tour_id: tourId,
+      tourId: tourId,
       title,
-      start: startTime,
-      end: endTime,
-      date: `${date}`,
-      description,
-      expense,
+      tourScheduleStart: `${date}T${startTime}`, // 시작 날짜와 시간을 결합
+      tourScheduleEnd: `${date}T${endTime}`, // 끝 날짜와 시간을 결합
+      tourScheduleDay: date,
+      contents: description,
+      cost: expense,
     };
 
     try {
       const savedEvent = await saveEvent(newEvent);
-      console.log(savedEvent);
-      onSubmit(savedEvent); // 저장된 이벤트 데이터 전달
+      console.log("Saved Event:", savedEvent);
+      onSubmit({
+        title: savedEvent.title,
+        start: savedEvent.tourScheduleStart,
+        end: savedEvent.tourScheduleEnd,
+        id: savedEvent.tourId,
+        description: savedEvent.contents,
+        expense: savedEvent.cost,
+      });
       // 폼 초기화
       setTitle("");
       setStartTime("");
       setEndTime("");
       setDescription("");
-      setExpense(0); // 초기화할 때 숫자는 0으로 설정
+      setExpense(0);
     } catch (error) {
-      console.error(error);
+      console.error("Error saving event:", error);
     }
   };
 
@@ -56,7 +63,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
         <input
           type="time"
           value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
+          onChange={e => setStartTime(e.target.value)}
           readOnly={isReadOnly}
           required
         />
@@ -64,21 +71,21 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
         <input
           type="time"
           value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
+          onChange={e => setEndTime(e.target.value)}
           readOnly={isReadOnly}
         />
       </Time>
       <Else>
         <input
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           readOnly={isReadOnly}
           placeholder="제목을 입력해 주세요"
           required
         />
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={e => setDescription(e.target.value)}
           readOnly={isReadOnly}
           placeholder="내용을 입력해 주세요"
         ></textarea>
@@ -86,7 +93,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
         <input
           type="number"
           value={expense}
-          onChange={(e) => setExpense(e.target.value)}
+          onChange={e => setExpense(e.target.value)}
           placeholder="소비금"
           readOnly={isReadOnly}
         />
@@ -103,7 +110,7 @@ const Form = styled.div`
   border-radius: 10px;
   margin-top: 10px;
   padding: 10px 5px 5px 5px;
-  background-color: blue;
+  background-color: white;
 `;
 
 const Time = styled.div`
