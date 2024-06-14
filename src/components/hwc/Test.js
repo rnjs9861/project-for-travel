@@ -22,15 +22,19 @@ const Test = () => {
 
   useEffect(() => {
     // 초기 데이터 로드
+    fetchScheduleDetail();
+  }, []);
+
+  const fetchScheduleDetail = () => {
     axios
-      .get("/api/schedule/1") // 이 엔드포인트는 백엔드에서 제공해야 합니다.
+      .get("http://192.168.0.144:5114/api/tour/detail?tour_id=1")
       .then(response => {
         setSchedule(response.data);
       })
       .catch(error => {
         console.error("Error fetching schedule data:", error);
       });
-  }, []);
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -75,7 +79,7 @@ const Test = () => {
   const handleDelete = () => {
     // 일정 삭제 API 호출
     axios
-      .delete(`/api/schedule/${schedule.tourId}`)
+      .delete(`/api/tour/${schedule.tourId}`)
       .then(response => {
         console.log("삭제된 일정:", response.data);
         setSchedule({

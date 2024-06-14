@@ -78,7 +78,7 @@
   grid-gap: 20px;
   position: absolute;
   width: 300px;
-  height: 500px;
+  height: 600px;
   left: 100px;
   top: 260px;
   box-shadow: 3px 3px 3px black;
@@ -88,12 +88,18 @@
   border-radius: 10px;
 }
 
+.color-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .index-travel-schedule {
   overflow: hidden;
   box-sizing: border-box;
   position: absolute;
   width: 240px;
-  height: 445px;
+  height: 545px;
   left: 30px;
   top: 27px;
   background: #c3fdde;
@@ -103,8 +109,8 @@
 
 .index-p-note {
   position: absolute;
-  width: 100px;
-  line-height: 88px;
+  width: 200px;
+  line-height: 89px;
   left: 10px;
   top: 20px;
 }
