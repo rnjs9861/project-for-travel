@@ -68,6 +68,8 @@ const CalendarsForAllPlan = () => {
       {/* <Header>
         <img src={ALOTlogo} alt="로고" />
       </Header> */}
+      {/* <Body> */}
+
       <CalendarContainer>
         <Calendar>
           <FullCalendar
@@ -107,6 +109,9 @@ const CalendarsForAllPlan = () => {
           )}
         </EventModalWrap>
       </CalendarContainer>
+      {/* </Body> */}
+
+
     </>
   );
 };
@@ -130,9 +135,9 @@ const Header = styled.header`
   }
 `;
 
-const Body = styled.div`
-  padding-top: 180.24px;
-`;
+// const Body = styled.div`
+//   padding-top: 180.24px;
+// `;
 
 const CalendarContainer = styled.div`
   display: flex;
