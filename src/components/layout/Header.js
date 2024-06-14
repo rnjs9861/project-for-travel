@@ -24,7 +24,9 @@ const Header = ({ onheader }) => {
     if (isUser) {
       setIsUser("");
       localStorage.setItem("user", "");
+
       handleNavi("홈", "/");
+
 
     }
     if (!isUser) {

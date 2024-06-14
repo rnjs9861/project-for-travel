@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Test from "./components/hwc/Test";
+import ScheduleTest from "./pages/hwc/ScheduleTest";
 import Header from "./components/layout/Header";
 import { UserInfoProvider } from "./context/UserInfoProvider";
 import "./css/common.css";
@@ -29,10 +29,9 @@ function App() {
             element={<LogIn setOnHeader={setOnHeader} />}
           ></Route>
           <Route path="/testpage" element={<TestPage />}></Route>
-          <Route path="/test" element={<Test />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />
-          <Route path="/Test" element={<Test></Test>}></Route>
+          <Route path="/" element={<ScheduleTest></ScheduleTest>}></Route>
 
           {/* GMU경로 */}
           <Route path="/plan/:id" element={<Calendars></Calendars>} />

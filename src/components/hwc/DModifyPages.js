@@ -5,17 +5,26 @@ const DModifyPages = ({ schedule, onChange, isEditing }) => (
     <div className="index-travel-schedule">
       <h3 className="index-travelday-input">
         <div className="index-p-note">
-          <span className="span-p-note">제목</span>
+          <span className="span-p-note1">제목</span>
           <br />
-          <span className="span-p-note">위치</span>
+          <span className="span-p-note2">위치</span>
           <br />
-          <span className="span-p-note">시작일</span>
+          <span className="span-p-note3">시작일</span>
           <br />
-          <span className="span-p-note">종료일</span>
+          <span className="span-p-note4">종료일</span>
           <br />
-          <span className="span-p-note">예산</span>
+          <span className="span-p-note5">예산</span>
           <br />
-          <span className="span-p-note">색상</span>
+          <label className="color-label">
+            일정표 색상
+            <input
+              type="color"
+              name="tourColor"
+              value={schedule.tourColor}
+              onChange={onChange}
+              disabled={!isEditing}
+            />
+          </label>
         </div>
       </h3>
       <div className="index-text-box">
