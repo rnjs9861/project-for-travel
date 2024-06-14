@@ -23,11 +23,11 @@ const Header = ({ onheader }) => {
   const handleAuth = () => {
     if (isUser) {
       setIsUser("");
-      sessionStorage.setItem("user", "");
-      handleNavi("홈", "/");
+      localStorage.setItem("user", "");
+      // handleNavi("/");
     }
     if (!isUser) {
-      handleNavi("회원가입", "/signup");
+      navigate("/signup");
     }
   };
   const handleStatus = () => {
@@ -59,7 +59,7 @@ const Header = ({ onheader }) => {
                 src="/www/images/KakaoTalk_20240607_150139849.jpg"
                 className="alotimg"
                 onClick={() => {
-                  handleNavi(null, "/");
+                  navigate("/");
                 }}
               />
             </a>

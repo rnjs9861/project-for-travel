@@ -19,23 +19,23 @@ const Signup = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   // 유효성 검사 함수
-  const validateId = (id) => {
+  const validateId = id => {
     const regEx = /^[a-zA-Z0-9]{6,12}$/;
     return regEx.test(id);
   };
 
-  const validatePassword = (password) => {
+  const validatePassword = password => {
     const regEx =
       /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
     return regEx.test(password);
   };
 
-  const validateEmail = (email) => {
-    const regEx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validateEmail = email => {
+    const regEx = /^[a-zA-Z0-9]{8,12}@[a-z]{3,5}\.(com|net|org)$/;
     return regEx.test(email);
   };
 
-  const handleIdChange = async (e) => {
+  const handleIdChange = async e => {
     const newId = e.target.value;
     setUserId(newId);
 
@@ -60,33 +60,33 @@ const Signup = () => {
     }
   };
 
-  const handlePwChange = (e) => {
+  const handlePwChange = e => {
     const newPw = e.target.value;
     setUserPw(newPw);
     setPwError(
       validatePassword(newPw)
         ? ""
-        : "비밀번호는 8~20 글자, 특수문자와 숫자를 포함해야 합니다."
+        : "비밀번호는 8~20 글자, 특수문자와 숫자를 포함해야 합니다.",
     );
   };
 
-  const handleConfirmPwChange = (e) => {
+  const handleConfirmPwChange = e => {
     const newConfirmPw = e.target.value;
     setConfirmPw(newConfirmPw);
     setConfirmPwError(
-      userPw === newConfirmPw ? "" : "비밀번호가 일치하지 않습니다."
+      userPw === newConfirmPw ? "" : "비밀번호가 일치하지 않습니다.",
     );
   };
 
-  const handleEmailChange = (e) => {
+  const handleEmailChange = e => {
     const newEmail = e.target.value;
     setUserEmail(newEmail);
     setEmailError(
-      validateEmail(newEmail) ? "" : "올바른 이메일 형식이 아닙니다."
+      validateEmail(newEmail) ? "" : "올바른 이메일 형식이 아닙니다.",
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const idValidationError = validateId(userId)
@@ -174,7 +174,7 @@ const Signup = () => {
             <Input
               type="text"
               value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={e => setUserName(e.target.value)}
             />
           </InputField>
           <Button type="submit">회원가입</Button>
