@@ -15,7 +15,7 @@ const Plan = () => {
   const [tourBudget, setTourBudget] = useState("");
   const [mapCenter, setMapCenter] = useState([37.5665, 126.978]);
 
-  const { userId } = useParams();
+  // const { userId } = useParams();
 
   const navigate = useNavigate();
 
@@ -61,9 +61,17 @@ const Plan = () => {
     console.log(userId);
 
     try {
-      const planData = await postPlan(writeData);
-      console.log(planData);
-      navigate(`/plan/${planData.id}`);
+      const response = await postPlan(writeData);
+      console.log("Response:", response); // 디버그 출력
+
+      // 여기서 resultData를 id로 사용
+      const planId = response.resultData; // id로 사용
+
+      if (planId) {
+        navigate(`/plan/${planId}`);
+      } else {
+        console.error("Invalid plan data", response);
+      }
     } catch (error) {
       console.log(error);
     }

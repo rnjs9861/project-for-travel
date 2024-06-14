@@ -25,6 +25,7 @@ const Header = ({ onheader }) => {
       setIsUser("");
       localStorage.setItem("user", "");
       handleNavi("홈", "/");
+
     }
     if (!isUser) {
       navigate("/signup");
