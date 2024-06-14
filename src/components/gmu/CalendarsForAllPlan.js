@@ -3,8 +3,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import styled from "styled-components";
-import { getAllEvents, getAllPlans } from "../../apis/gmu/planCalendar"; // getAllPlans API 가져오기
 import ALOTlogo from "../../images/ALOTlogo.png";
+import { getAllEvents, getAllPlans } from "../../apis/gmu/planApi";
 
 const CalendarsForAllPlan = () => {
   const [events, setEvents] = useState([]);
@@ -68,47 +68,45 @@ const CalendarsForAllPlan = () => {
       {/* <Header>
         <img src={ALOTlogo} alt="로고" />
       </Header> */}
-      <Body>
-        <CalendarContainer>
-          <Calendar>
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              dateClick={handleDateClick}
-              events={events}
-            />
-          </Calendar>
+      <CalendarContainer>
+        <Calendar>
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            dateClick={handleDateClick}
+            events={events}
+          />
+        </Calendar>
 
-          <EventModalWrap>
-            {selectedDate && (
-              <>
-                <SelectedDate>{selectedDate} 일정</SelectedDate>
-                {selectedEvents.map((event, index) => (
-                  <EventSummary key={index}>
-                    <strong>{event.title}</strong>
-                    <br />
-                    {event.extendedProps?.type === "plan" ? (
-                      <>
-                        <p>시작: {event.start.split("T")[0]}</p>
-                        <p>끝: {event.end.split("T")[0]}</p>
-                      </>
-                    ) : (
-                      <>
-                        <p>
-                          시간: {event.start.split("T")[1]} -{" "}
-                          {event.end.split("T")[1]}
-                        </p>
-                        <p>설명: {event.description}</p>
-                        <p>비용: {event.expense}</p>
-                      </>
-                    )}
-                  </EventSummary>
-                ))}
-              </>
-            )}
-          </EventModalWrap>
-        </CalendarContainer>
-      </Body>
+        <EventModalWrap>
+          {selectedDate && (
+            <>
+              <SelectedDate>{selectedDate} 일정</SelectedDate>
+              {selectedEvents.map((event, index) => (
+                <EventSummary key={index}>
+                  <strong>{event.title}</strong>
+                  <br />
+                  {event.extendedProps?.type === "plan" ? (
+                    <>
+                      <p>시작: {event.start.split("T")[0]}</p>
+                      <p>끝: {event.end.split("T")[0]}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        시간: {event.start.split("T")[1]} -{" "}
+                        {event.end.split("T")[1]}
+                      </p>
+                      <p>설명: {event.description}</p>
+                      <p>비용: {event.expense}</p>
+                    </>
+                  )}
+                </EventSummary>
+              ))}
+            </>
+          )}
+        </EventModalWrap>
+      </CalendarContainer>
     </>
   );
 };
