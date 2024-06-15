@@ -12,21 +12,6 @@ export const saveEvent = async event => {
   }
 };
 
-// 모든 계획 가져오기
-// export const getAllPlans = async id => {
-//   try {
-//     const response = await axios.get(`${SERVER}/api/tour?signed_user_id=${id}`);
-//     if (response.data && typeof response.data === "object") {
-//       return response.data;
-//     } else {
-//       console.error("Invalid response data:", response.data);
-//       return [];
-//     }
-//   } catch (error) {
-//     console.error("Error fetching all plans:", error);
-//   }
-// };
-
 // 모든 이벤트 가져오기
 export const getAllEvents = async (tourId, tourScheduleDay) => {
   try {

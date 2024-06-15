@@ -74,88 +74,98 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
   };
 
   return (
-    <Form>
-      <h2>
-        {/* {date} 일정 {isReadOnly ? "읽기" : "추가"} */}
-        {isReadOnly ? "여행 제목" : `${date} 일정 추가`}
-      </h2>
-      {!isReadOnly && (
-        <Time>
-          <label>시작 시간</label>
-          <input
-            type="time"
-            value={startTime}
-            onChange={e => setStartTime(e.target.value)}
-            readOnly={isReadOnly}
-            required
-          />
-          <label>끝 시간</label>
-          <input
-            type="time"
-            value={endTime}
-            onChange={e => setEndTime(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </Time>
-      )}
-      <Else>
-        <input
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          readOnly={isReadOnly}
-          placeholder="제목을 입력해 주세요"
-          required
-        />
+    <>
+      <Form>
+        <h2>
+          {/* {date} 일정 {isReadOnly ? "읽기" : "추가"} */}
+          {isReadOnly ? "여행 제목" : `${date} 일정 추가`}
+        </h2>
         {!isReadOnly && (
-          <>
-            <textarea
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="내용을 입력해 주세요"
-            ></textarea>
-            <label>소비금</label>
+          <Time>
+            <label>시작 시간</label>
             <input
-              type="number"
-              value={expense}
-              onChange={e => setExpense(e.target.value)}
-              placeholder="소비금"
+              type="time"
+              value={startTime}
+              onChange={e => setStartTime(e.target.value)}
+              readOnly={isReadOnly}
+              required
+            />
+            <label>끝 시간</label>
+            <input
+              type="time"
+              value={endTime}
+              onChange={e => setEndTime(e.target.value)}
               readOnly={isReadOnly}
             />
-          </>
+          </Time>
         )}
-      </Else>
-      {!isReadOnly && <Button onClick={handleSubmit}>저장</Button>}
-
-      {/* API 데이터 표시 */}
-      <div>
-        {loading ? (
-          <p>데이터 로딩 중...</p>
-        ) : error ? (
-          <p>에러 발생: {error}</p>
-        ) : (
-          <EventList>
-            {events.map(ev => (
-              <EventItem
-                key={ev.tourScheduleId}
-                onClick={() => handleEventClick(ev)}
-              >
-                <p>{ev.title}</p>
-                <p>
-                  {ev.tourScheduleStart} ~ {ev.tourScheduleEnd}
-                </p>
-              </EventItem>
-            ))}
-          </EventList>
-        )}
-      </div>
-    </Form>
+        <Else>
+          <input
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            readOnly={isReadOnly}
+            placeholder="제목을 입력해 주세요"
+            required
+          />
+          {!isReadOnly && (
+            <>
+              <textarea
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                readOnly={isReadOnly}
+                placeholder="내용을 입력해 주세요"
+              ></textarea>
+              <label>소비금</label>
+              <input
+                type="number"
+                value={expense}
+                onChange={e => setExpense(e.target.value)}
+                placeholder="소비금"
+                readOnly={isReadOnly}
+              />
+            </>
+          )}
+        </Else>
+        {!isReadOnly && <Button onClick={handleSubmit}>저장</Button>}
+      </Form>
+      {events && events.length > 0 && (
+        <FormSaved>
+          {loading ? (
+            <p>일정을 불러오는 중 입니다...</p>
+          ) : error ? (
+            <p>에러 발생: {error}</p>
+          ) : (
+            <EventList>
+              {events.map(ev => (
+                <EventItem
+                  key={ev.tourScheduleId}
+                  onClick={() => handleEventClick(ev)}
+                >
+                  <p>{ev.title}</p>
+                  <p>
+                    {ev.tourScheduleStart} ~ {ev.tourScheduleEnd}
+                  </p>
+                </EventItem>
+              ))}
+            </EventList>
+          )}
+        </FormSaved>
+      )}
+    </>
   );
 };
 
 export default EventModal;
 
 const Form = styled.div`
+  border: solid;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px 5px 5px 5px;
+  background-color: white;
+`;
+
+const FormSaved = styled.div`
   border: solid;
   border-radius: 10px;
   margin-top: 10px;

@@ -5,13 +5,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-// 날짜 형식 보정 함수
-const addOneDay = date => {
-  const newDate = new Date(date);
-  newDate.setDate(newDate.getDate() + 1);
-  return newDate.toISOString().split("T")[0];
-};
+import { SERVER } from "../../apis/config";
+import EventModalForAll from "./EventModalForAll";
 
 // 랜덤 색상 생성 함수
 const getRandomColor = () => {
@@ -29,8 +24,6 @@ const getAllPlans = async userId => {
     const response = await axios.get("/api/tour", {
       params: { signed_user_id: userId },
     });
-    console.log("API Full Response:", response); // 전체 응답 객체를 출력
-    console.log("API Response Data:", response.data); // 데이터를 확인하기 위한 콘솔 로그
     return response.data.resultData; // resultData에서 배열을 반환
   } catch (error) {
     console.error("Failed to fetch plans", error);
@@ -38,16 +31,36 @@ const getAllPlans = async userId => {
   }
 };
 
+const getEventsForDate = async (tourId, date) => {
+  try {
+    const response = await axios.get(
+      `${SERVER}/api/tour/schedule/tourScheduleList?tour_id=${tourId}&tour_schedule_day=${date}`,
+    );
+    return response.data.resultData.map(event => ({
+      tourScheduleId: event.tourScheduleId,
+      title: event.title,
+      start: `${event.tourScheduleDay}T${event.tourScheduleStart}`,
+      end: `${event.tourScheduleDay}T${event.tourScheduleEnd}`,
+      tourScheduleDay: event.tourScheduleDay,
+      description: event.contents,
+      expense: event.cost,
+    }));
+  } catch (error) {
+    console.error("Error loading events for selected date:", error);
+    return [];
+  }
+};
+
 const CalendarsForAllPlan = () => {
   const [events, setEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedEvents, setSelectedEvents] = useState([]);
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const [dateEvents, setDateEvents] = useState([]);
+  const [selectedTourId, setSelectedTourId] = useState(null); // 선택된 투어 ID 상태 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadAllData = async () => {
       try {
-        // 로그인된 사용자의 ID를 가져오기
         const userId = localStorage.getItem("user");
 
         if (!userId) {
@@ -55,23 +68,19 @@ const CalendarsForAllPlan = () => {
           return;
         }
 
-        // 모든 여행 계획 가져오기
         const plans = await getAllPlans(userId);
-
-        console.log("Fetched plans:", plans); // 데이터를 확인하기 위한 콘솔 로그
 
         if (!plans || !Array.isArray(plans)) {
           console.error("Plans data is not an array or is undefined:", plans);
           return;
         }
 
-        // 여행 계획을 events 형식으로 변환
         const planEvents = plans.map(plan => ({
-          id: plan.tourId, // 맞춤형 key 사용
+          id: plan.tourId,
           title: plan.title,
           start: plan.tourStartDay,
-          end: addOneDay(plan.tourFinishDay), // 끝 날짜를 하루 증가
-          backgroundColor: getRandomColor(), // 랜덤 색상 적용
+          end: new Date(plan.tourFinishDay).toISOString(),
+          backgroundColor: getRandomColor(),
           extendedProps: {
             location: plan.tourLocation,
           },
@@ -86,37 +95,45 @@ const CalendarsForAllPlan = () => {
     loadAllData();
   }, []);
 
-  useEffect(() => {
-    if (selectedDate) {
-      const filteredEvents = events.filter(
-        event => event.start.split("T")[0] === selectedDate,
-      );
-      const sortedEvents = filteredEvents.sort((a, b) => {
-        const aTime = new Date(a.start).getTime();
-        const bTime = new Date(b.start).getTime();
-        return aTime - bTime;
-      });
-      setSelectedEvents(sortedEvents);
-    }
-  }, [selectedDate, events]);
-
-  const handleDateClick = info => {
+  const handleDateClick = async info => {
     setSelectedDate(info.dateStr);
+
+    // 선택된 날짜에 해당하는 투어를 필터링하여 가져옵니다
+    const filteredTours = events.filter(event => {
+      const eventStart = new Date(event.start).toISOString().split("T")[0];
+      const eventEnd = new Date(event.end).toISOString().split("T")[0];
+      return eventStart <= info.dateStr && eventEnd >= info.dateStr;
+    });
+
+    if (filteredTours.length === 0) {
+      console.error("No tours found for the selected date");
+      setDateEvents([]);
+      return;
+    }
+
+    const tourId = filteredTours[0].id; // 필터된 첫 번째 투어의 tourId 사용
+
+    setSelectedTourId(tourId); // 선택된 tourId 상태 업데이트
+
+    try {
+      const eventsForDate = await getEventsForDate(tourId, info.dateStr);
+      setDateEvents(eventsForDate);
+    } catch (error) {
+      console.error("Error loading events for selected date:", error);
+    }
   };
 
-  // 이벤트 클릭 핸들러 추가
+  const handleEventSubmit = event => {
+    setEvents(prevEvents => [...prevEvents, event]);
+  };
+
   const handleEventClick = info => {
     const eventId = info.event.id;
-    navigate(`/plan/${eventId}`); // 이벤트 ID를 사용해 이동
+    navigate(`/plan/${eventId}`);
   };
 
   return (
     <>
-      {/* <Header>
-        <img src={ALOTlogo} alt="로고" />
-      </Header> */}
-      {/* <Body> */}
-
       <CalendarContainer>
         <Calendar>
           <FullCalendar
@@ -124,8 +141,8 @@ const CalendarsForAllPlan = () => {
             initialView="dayGridMonth"
             dateClick={handleDateClick}
             events={events}
-            eventClick={handleEventClick} // 이벤트 클릭 핸들러 설정
-            eventContent={renderEventContent} // 이벤트 콘텐츠 렌더링을 위한 함수
+            eventClick={handleEventClick}
+            eventContent={renderEventContent}
           />
         </Calendar>
 
@@ -133,25 +150,20 @@ const CalendarsForAllPlan = () => {
           {selectedDate && (
             <>
               <SelectedDate>{selectedDate} 일정</SelectedDate>
-              {selectedEvents.map((event, index) => (
-                <EventSummary key={index}>
-                  <strong>{event.title}</strong>
-                  <br />
-                  <p>목적지: {event.extendedProps.location}</p>
-                  <p>시작: {event.start.split("T")[0]}</p>
-                  <p>끝: {event.end.split("T")[0]}</p>
-                </EventSummary>
-              ))}
+              <EventModalForAll
+                date={selectedDate}
+                onSubmit={handleEventSubmit}
+                events={dateEvents}
+                tourId={selectedTourId}
+              />
             </>
           )}
         </EventModalWrap>
       </CalendarContainer>
-      {/* </Body> */}
     </>
   );
 };
 
-// 이벤트 콘텐츠 렌더링 함수
 const renderEventContent = eventInfo => (
   <div>
     <i>{eventInfo.event.title}</i>
@@ -161,25 +173,6 @@ const renderEventContent = eventInfo => (
 export default CalendarsForAllPlan;
 
 // Styled-components
-
-const Header = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-
-  img {
-    margin: auto;
-    display: block;
-    width: 300px;
-    padding: 20px;
-  }
-`;
-
-// const Body = styled.div`
-//   padding-top: 180.24px;
-// `;
 
 const CalendarContainer = styled.div`
   display: flex;
