@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { saveEvent } from "../../apis/gmu/planApi";
+import { Link } from "react-router-dom";
 
 const EventModalForAll = ({ date, onSubmit, events, tourId }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -64,6 +65,10 @@ const EventModalForAll = ({ date, onSubmit, events, tourId }) => {
                 <p>
                   {ev.start.split("T")[1]} ~ {ev.end.split("T")[1]}
                 </p>
+                <br />
+                <DetailButton to={`/detail/${ev.tourScheduleId}`}>
+                  상세보기
+                </DetailButton>
               </EventItem>
             ))}
           </EventList>
@@ -135,7 +140,6 @@ const EventList = styled.ul`
 `;
 
 const EventItem = styled.li`
-  border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -146,5 +150,19 @@ const EventItem = styled.li`
 
   p {
     margin: 0;
+  }
+`;
+
+const DetailButton = styled(Link)`
+  padding: 5px 10px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #005cb2;
   }
 `;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { saveEvent } from "../../apis/gmu/planApi";
 import useFetchEvents from "../../apis/gmu/useFetchEvent";
+import { Link } from "react-router-dom"; // Link 추가
 
 const EventModal = ({ date, onSubmit, event, tourId }) => {
   const [title, setTitle] = useState("");
@@ -12,7 +13,6 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const isReadOnly = !!event;
 
-  // API로부터 데이터를 가져옵니다
   const { events, loading, error } = useFetchEvents(tourId, date);
 
   useEffect(() => {
@@ -76,10 +76,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
   return (
     <>
       <Form>
-        <h2>
-          {/* {date} 일정 {isReadOnly ? "읽기" : "추가"} */}
-          {isReadOnly ? "여행 제목" : `${date} 일정 추가`}
-        </h2>
+        <h2>{isReadOnly ? "여행 제목" : `${date} 일정 추가`}</h2>
         {!isReadOnly && (
           <Time>
             <label>시작 시간</label>
@@ -137,7 +134,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
           ) : (
             <EventList>
               {events.map(ev => (
-                <EventItem
+                <EventCard
                   key={ev.tourScheduleId}
                   onClick={() => handleEventClick(ev)}
                 >
@@ -145,7 +142,11 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
                   <p>
                     {ev.tourScheduleStart} ~ {ev.tourScheduleEnd}
                   </p>
-                </EventItem>
+                  <br />
+                  <DetailButton to={`/detail/${ev.tourScheduleId}`}>
+                    상세보기
+                  </DetailButton>
+                </EventCard>
               ))}
             </EventList>
           )}
@@ -156,6 +157,8 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
 };
 
 export default EventModal;
+
+// Styled-components
 
 const Form = styled.div`
   border: solid;
@@ -222,8 +225,7 @@ const EventList = styled.ul`
   margin: 0;
 `;
 
-const EventItem = styled.li`
-  border: 1px solid #ccc;
+const EventCard = styled.li`
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -234,5 +236,19 @@ const EventItem = styled.li`
 
   p {
     margin: 0;
+  }
+`;
+
+const DetailButton = styled(Link)`
+  padding: 5px 10px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #005cb2;
   }
 `;

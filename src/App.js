@@ -17,6 +17,7 @@ import PlanModifyPage from "./pages/gmu/PlanModifyPage";
 import MyPage from "./components/gmu/MyPage";
 import EditProfile from "./components/gmu/EditProfile";
 import Footer from "./components/gmu/Footer";
+import Detail from "./components/gmu/Detail";
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);
@@ -41,6 +42,7 @@ function App() {
           <Route path="/planModify/:id" element={<PlanModifyPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/editmypage" element={<EditProfile />} />
+          <Route path="/detail/:tourScheduleId" element={<Detail />} />
         </Routes>
         <Footer />
       </BrowserRouter>

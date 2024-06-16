@@ -10,12 +10,17 @@ import EventModalForAll from "./EventModalForAll";
 
 // 랜덤 색상 생성 함수
 const getRandomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
+  const colors = [
+    "#FF0000",
+    "#FFA500",
+    "#1e88e5",
+
+    "#008000",
+    "#0000FF",
+    "#4B0082",
+    "#EE82EE",
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
 };
 
 // API 호출을 위한 함수
