@@ -43,7 +43,7 @@ const getEventsForDate = async (tourId, date) => {
     );
     return response.data.resultData.map(event => ({
       tourScheduleId: event.tourScheduleId,
-      title: event.title,
+      tourScheduleTitle: event.title,
       start: `${event.tourScheduleDay}T${event.tourScheduleStart}`,
       end: `${event.tourScheduleDay}T${event.tourScheduleEnd}`,
       tourScheduleDay: event.tourScheduleDay,

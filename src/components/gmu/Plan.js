@@ -137,7 +137,7 @@ const Plan = () => {
                 />
               </FormFactor>
               <FormFactor>
-                <Label htmlFor="destination">목적지</Label>
+                <Label htmlFor="tourLocation">목적지</Label>
                 <Input
                   type="text"
                   id="tourLocation"
@@ -152,7 +152,7 @@ const Plan = () => {
                 <MapMobile center={mapCenter} destination={tourLocation} />
               </MapForMobile>
               <FormFactor>
-                <Label htmlFor="start-date">시작일</Label>
+                <Label htmlFor="tourStartDay">시작일</Label>
                 <Input
                   type="date"
                   id="tourStartDay"
@@ -163,7 +163,8 @@ const Plan = () => {
                 />
               </FormFactor>
               <FormFactor>
-                <Label htmlFor="end-date">끝나는 날</Label>
+                <Label htmlFor="tourFinishDay">끝나는 날</Label>
+                <br />
                 <Input
                   type="date"
                   id="tourFinishDay"
@@ -176,7 +177,7 @@ const Plan = () => {
               {dateError && <ErrorMessage>{dateError}</ErrorMessage>}{" "}
               {/* 오류 메시지 표시 */}
               <FormFactor>
-                <Label htmlFor="budget">예산</Label>
+                <Label htmlFor="tourBudget">예산</Label>
                 <Input
                   type="number"
                   id="tourBudget"
@@ -189,7 +190,7 @@ const Plan = () => {
               </FormFactor>
               <Button type="submit">저장</Button>
             </Form>
-            <br />
+            <br /> <br /> <br /> <br /> <br /> <br />
             <Ad>
               <AdImg
                 src={randomAd}

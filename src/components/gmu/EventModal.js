@@ -36,7 +36,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
   const handleSubmit = async () => {
     const newEvent = {
       tourId: tourId,
-      title,
+      tourScheduleTitle: title,
       tourScheduleStart: `${date}T${startTime}`,
       tourScheduleEnd: `${date}T${endTime}`,
       tourScheduleDay: date,
@@ -139,7 +139,7 @@ const EventModal = ({ date, onSubmit, event, tourId }) => {
                   key={ev.tourScheduleId}
                   onClick={() => handleEventClick(ev)}
                 >
-                  <p>{ev.title}</p>
+                  <p>{ev.tourScheduleTitle}</p>
                   <p>
                     {ev.tourScheduleStart} ~ {ev.tourScheduleEnd}
                   </p>

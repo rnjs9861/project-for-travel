@@ -17,6 +17,7 @@ import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
 import UserInfo from "./pages/ldh/UserInfo";
 import Main from "./pages/ldh/Main";
+import Footer from "./components/gmu/Footer";
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);
@@ -47,6 +48,7 @@ function App() {
             element={<ScheduleTest></ScheduleTest>}
           ></Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </UserInfoProvider>
   );
