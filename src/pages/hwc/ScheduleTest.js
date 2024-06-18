@@ -1,8 +1,8 @@
 import React from "react";
-import Test from "../../components/hwc/Test";
+import DetailModify from "../../components/hwc/DetailModify";
 
 const ScheduleTest = () => {
-  return <Test></Test>;
+  return <DetailModify></DetailModify>;
 };
 
 export default ScheduleTest;

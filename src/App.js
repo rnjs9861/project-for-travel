@@ -31,7 +31,11 @@ function App() {
           <Route path="/testpage" element={<TestPage />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/signup" element={<SignupPage></SignupPage>} />
-          <Route path="/" element={<ScheduleTest></ScheduleTest>}></Route>
+          <Route path="/detail" element={<ScheduleTest></ScheduleTest>}></Route>
+          <Route
+            path="/detail/:tourScheduleId"
+            element={<ScheduleTest></ScheduleTest>}
+          ></Route>
 
           {/* GMU경로 */}
           <Route path="/plan/:id" element={<Calendars></Calendars>} />

@@ -1,0 +1,123 @@
+상세일정 페이지 들어갈 기능
+
+스웨거 주소 : http://112.222.157.156:5114/swagger-ui/index.html
+
+api 테스트 과정
+
+포스트맨 : (GET, POST, DELETE, PUT) 
+
+(백엔드 데이터 가져오기 ↔ 백엔드에 데이터 보내기)
+
+프론트엔드 추가 기능 : 데이터 수정 & 삭제 & 읽기
+
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <>
+    <App />
+  </>
+);
+
+App.js
+
+{
+  "tourId": 11226,
+  "tourScheduleDay": "string",
+  "tourScheduleStart": "string",
+  "tourScheduleEnd": "string",
+  "title": "string",
+  "contents": "string",
+  "cost": 9007199254740991
+}
+
+http://192.168.0.1
+
+tourld11226
+Dnscjf12!
+dnscjf@naver.com
+황운철
+
+
+
+package.json 원본
+
+{
+  "name": "project-for-travel",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@fullcalendar/daygrid": "^6.1.14",
+    "@fullcalendar/interaction": "^6.1.14",
+    "@fullcalendar/react": "^6.1.14",
+    "@types/axios": "^0.14.0",
+    "@types/node": "^16.18.97",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.7.2",
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
+    "moment": "^2.30.1",
+    "react": "^18.3.1",
+    "react-calendar": "^5.0.0",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.2.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.23.1",
+    "react-scripts": "5.0.1",
+    "styled-components": "^6.1.11",
+    "swiper": "^11.1.4",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.2",
+    "prettier": "^3.2.5"
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "none"
+  },
+  "proxy": "http://192.168.0.144:5114"
+}
+
+const response = await axios.get(`/api/tour/detail?tour_id=${tourId}`);
+
+const response = await axios.get("/api/tour/schedule/tourScheduleList"
