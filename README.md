@@ -66,3 +66,6 @@ upw newPw 두개만
 Drop.js 수정
 Main.js 작업
 CheckList.js, List.js, Item.js 컴포넌트 확인 필요
+
+2024-06-18
+버그픽스
