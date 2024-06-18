@@ -1,0 +1,10 @@
+img.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive {
+  width: 50px !important;
+  height: 50px !important;
+  background-image: url("./images/pointer.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  z-index: 100px;
+  background-color: transparent;
+}

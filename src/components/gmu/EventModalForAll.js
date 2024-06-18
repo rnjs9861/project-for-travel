@@ -1,46 +1,168 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { saveEvent } from "../../apis/gmu/planApi";
+import { Link } from "react-router-dom";
 
-const Footer = () => {
+const EventModalForAll = ({ date, onSubmit, events, tourId }) => {
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isReadOnly, setIsReadOnly] = useState(false);
+
+  useEffect(() => {
+    if (events && events.length > 0) {
+      setSelectedEvent(events[0]);
+      setIsReadOnly(true);
+    } else {
+      setSelectedEvent(null);
+      setIsReadOnly(false);
+    }
+  }, [events]);
+
+  const handleSubmit = async () => {
+    if (!selectedEvent) return;
+
+    const newEvent = {
+      tourId,
+      tourScheduleTitle: selectedEvent.title,
+      tourScheduleStart: `${date}T${selectedEvent.start.split("T")[1]}`,
+      tourScheduleEnd: `${date}T${selectedEvent.end.split("T")[1]}`,
+      tourScheduleDay: date,
+      contents: selectedEvent.description,
+      cost: selectedEvent.expense,
+    };
+
+    try {
+      const savedEvent = await saveEvent(newEvent);
+      console.log("Saved Event:", savedEvent);
+
+      onSubmit({
+        title: savedEvent.tourScheduleTitle,
+        start: savedEvent.tourScheduleStart,
+        end: savedEvent.tourScheduleEnd,
+        id: savedEvent.tourScheduleId,
+        description: savedEvent.contents,
+        expense: savedEvent.cost,
+      });
+    } catch (error) {
+      console.error("Error saving event:", error);
+    }
+  };
+
+  const handleEventClick = event => {
+    setSelectedEvent(event);
+  };
+
   return (
-    <>
-      <FooterBody>
-        <FirmName>ALOT PTE LTD</FirmName>
-        <Ad>광고문의: 02-xxx-xxxx</Ad>{" "}
-        <Email>이메일 문의:ALifeOfTravel@gmail.com</Email>
-        <CopyRight>© Copyright ALOT Pte Ltd. Since 10 April 2024.</CopyRight>
-      </FooterBody>
-    </>
+    <Form>
+      <div>
+        {events && events.length > 0 ? (
+          <EventList>
+            {events.map(ev => (
+              <EventItem
+                key={ev.tourScheduleId}
+                onClick={() => handleEventClick(ev)}
+              >
+                <p>{ev.tourScheduleTitle}</p>
+                <p>
+                  {ev.start.split("T")[1]} ~ {ev.end.split("T")[1]}
+                </p>
+                <br />
+                <DetailButton to={`/detail/${ev.tourScheduleId}`}>
+                  상세보기
+                </DetailButton>
+              </EventItem>
+            ))}
+          </EventList>
+        ) : (
+          <p>계획 없음</p>
+        )}
+      </div>
+    </Form>
   );
 };
 
-export default Footer;
+export default EventModalForAll;
 
-const FooterBody = styled.div`
-  margin: 0 auto;
-
-  background-color: gray;
-  height: 200px;
-  padding: 20px 0px;
-  text-align: center;
+const Form = styled.div`
+  border: solid;
+  border-radius: 10px;
+  margin-top: 10px;
+  padding: 10px 5px 5px 5px;
+  background-color: white;
 `;
 
-const FirmName = styled.div`
-  padding: 10px 10px 10px 10px;
-  font-size: 20px;
+const Time = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  label {
+    margin-bottom: 5px;
+  }
+  input {
+    margin-bottom: 10px;
+    padding: 5px;
+    font-size: 1rem;
+  }
 `;
 
-const Ad = styled.div`
-  margin: 0 auto;
-  padding: 10px 10px 10px 10px;
+const Else = styled.div`
+  margin-bottom: 10px;
+  input,
+  textarea {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
 `;
 
-const Email = styled.div`
-  margin: 0 auto;
-  padding: 10px 10px 10px 10px;
+const Button = styled.button`
+  padding: 10px 20px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #005cb2;
+  }
 `;
 
-const CopyRight = styled.div`
-  margin: 0 auto;
-  padding: 10px 10px 10px 10px;
+const EventList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const EventItem = styled.li`
+  padding: 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  p {
+    margin: 0;
+  }
+`;
+
+const DetailButton = styled(Link)`
+  padding: 5px 10px;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #005cb2;
+  }
 `;
