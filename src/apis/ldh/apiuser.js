@@ -12,3 +12,22 @@ export const postLogin = async data => {
     console.log(error);
   }
 };
+
+export const getUserInfo = async (isUser) => {
+  try {
+      const response = await axios.get(`/api/user?uid=testid21`)
+      return response;
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+export const putUserPass = async (data) => {
+  console.log(data)
+  try {
+    const response = await axios.put(`/api/user/password?uid=testid21&upw=${data.upw}&newPw=${data.newPw}`)
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+}

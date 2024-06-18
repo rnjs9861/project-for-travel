@@ -1,10 +1,10 @@
-import React from "react";
 
 const Tour = ({ tour, tourClick }) => {
   return (
-    <button className="tourlist" onClick={tourClick}>
-      {tour}
-    </button>
+    <li className="navbar-header">
+      <a onClick={tourClick} >{tour}
+      </a>
+    </li>
   );
 };
 

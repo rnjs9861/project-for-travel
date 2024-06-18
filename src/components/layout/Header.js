@@ -24,10 +24,7 @@ const Header = ({ onheader }) => {
     if (isUser) {
       setIsUser("");
       localStorage.setItem("user", "");
-
       handleNavi("홈", "/");
-
-
     }
     if (!isUser) {
       navigate("/signup");
@@ -35,7 +32,7 @@ const Header = ({ onheader }) => {
   };
   const handleStatus = () => {
     if (isUser) {
-      handleNavi("내정보", "/mypage");
+      handleNavi("내정보", "/userinfo");
     }
     if (!isUser) {
       handleNavi("로그인", "/login");
@@ -53,8 +50,8 @@ const Header = ({ onheader }) => {
   }, [isUser]);
 
   return onheader ? (
-    <>
-      <nav className="navbar navbar-default">
+    <div className="headerwrap">
+      <nav className="navbar navbar-default navbar-fixed-top">
         <div className="container-fluid">
           <div className="navbar-header">
             <a className="navbar-brand" href="#">
@@ -62,7 +59,7 @@ const Header = ({ onheader }) => {
                 src="/www/images/KakaoTalk_20240607_150139849.jpg"
                 className="alotimg"
                 onClick={() => {
-                  navigate("/");
+                  handleNavi("home", "/");
                 }}
               />
             </a>
@@ -135,7 +132,7 @@ const Header = ({ onheader }) => {
           </ul>
         </div>
       </nav>
-    </>
+    </div>
   ) : null;
 };
 

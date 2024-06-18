@@ -60,14 +60,14 @@ const LogIn = ({ setOnHeader }) => {
       <header className="header">
         <div className="header-inner">
           <div className="header-inner-home">
-            <span
+            <img
+              className="alotlogo"
+              src="/images/ALOTlogo.png"
               onClick={() => {
                 navi("/");
                 setOnHeader(true);
               }}
-            >
-              홈으로
-            </span>
+            />
           </div>
         </div>
       </header>
@@ -130,19 +130,17 @@ const LogIn = ({ setOnHeader }) => {
                   <span className="none-id">{noneId}</span>
                   <span className="none-password">{nonePass}</span>
                 </div>
-                <button className="button">로그인</button>
+                <button className="button btn btn-info">로그인</button>
               </form>
             </div>
             <div className="user-login-menu">
-              <a href="#">
+              <div
+                onClick={() => {
+                  navi("/signup");
+                }}
+              >
                 <span>회원가입</span>
-              </a>
-              <a href="#">
-                <span>아이디 찾기</span>
-              </a>
-              <a href="#">
-                <span>비밀번호 찾기</span>
-              </a>
+              </div>
             </div>
           </div>
         </div>

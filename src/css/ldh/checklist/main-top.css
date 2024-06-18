@@ -1,12 +1,14 @@
 .tourwrap {
-  width: 90%;
+  width: 100%;
   height: 100%;
-  background-color: red;
-  margin: 0 auto 30px;
+  margin: 0 auto;
+  display: flex;
+  position: relative;
+}
+.pagination{
   display: flex;
 }
 .tourlist {
-  background-color: aqua;
   display: flex;
   gap: 10px;
   font-size: 20px;
@@ -15,32 +17,13 @@
 .tourlist :hover {
   cursor: pointer;
 }
-.main-wrap {
-}
-.main-top {
-  width: 100%;
-  height: 100%;
+.btnwrap{
+  position: absolute;
+  right: 0;
   display: flex;
-  justify-content: center;
+  align-items: center;
 }
-.main-top-title {
+.main-top-title{
   color: red;
-  width: 90%;
-  margin: 0 auto;
-}
-.list-form {
-  width: 100%;
-  height: 100%;
-}
-.main-top-wrap {
-  width: 90%;
-  height: 70px;
-}
-.main-top-list {
-  width: 100%;
-  height: 70px;
-  border: none;
-  background-color: antiquewhite;
-  font-size: 30px;
-  padding: 0 30px;
+  margin-bottom: 10px;
 }

@@ -41,3 +41,28 @@ ruls
 
 - 메인 페이지에서 계획 누를시 /plan/:id 페이지로 이동
   "proxy": "http://192.168.0.53:8080"
+
+# 수정필요
+
+체크리스트 새로 생성한 리스트 삭제안됨
+체크 모든 tour에서 적용됨
+
+get /api/user 마이페이지에서 get으로 보낼 데이터가 유저의 id임
+회원가입시 발급되는 userid를 보내야 하도록 수정 요청해야함
+수정 후 src/apis/ldh/apiuser.js getUserInfo의 axios 부분
+testid1를 isUser로 수정 필요
+
+pages/ldh/ test, test2, tsetItem / components/ldh/ListItem.js 삭제 요망
+
+회원정보수정 없는 비밀번호 입력시 500에러
+이를 statusCode 를 통하여 없으면, 비밀번호가 틀렸습니다 등의 메세지를 보내줘야함
+
+비밀번호수정 put의 파라미터
+upw newPw 두개만
+
+로그인페이지 작업 필요
+
+2024-06-17
+Drop.js 수정
+Main.js 작업
+CheckList.js, List.js, Item.js 컴포넌트 확인 필요

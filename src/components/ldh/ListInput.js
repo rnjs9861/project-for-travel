@@ -1,7 +1,7 @@
 const ListInput = ({ value, onChange }) => {
   return (
     <input
-      className="main-top-list"
+      className="form-control"
       type="text"
       placeholder="물품을 입력하세요"
       value={value}

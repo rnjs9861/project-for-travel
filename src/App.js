@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import ScheduleTest from "./pages/hwc/ScheduleTest";
+import Calendars from "./components/gmu/Calendars";
+import CalendarsForAllPlan from "./components/gmu/CalendarsForAllPlan";
+import EditProfile from "./components/gmu/EditProfile";
+import Test from "./components/hwc/Test";
 import Header from "./components/layout/Header";
 import { UserInfoProvider } from "./context/UserInfoProvider";
 import "./css/common.css";
 import "./css/reset.css";
 import TestPage from "./pages/TestPage";
+import PlanModifyPage from "./pages/gmu/PlanModifyPage";
+import PlanPage from "./pages/gmu/PlanPage";
 import SignupPage from "./pages/gmu/SignupPage";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
-import Calendars from "./components/gmu/Calendars";
-import CalendarsForAllPlan from "./components/gmu/CalendarsForAllPlan";
-import PlanPage from "./pages/gmu/PlanPage";
-import PlanModifyPage from "./pages/gmu/PlanModifyPage";
-import MyPage from "./components/gmu/MyPage";
-import EditProfile from "./components/gmu/EditProfile";
+import UserInfo from "./pages/ldh/UserInfo";
+import Main from "./pages/ldh/Main";
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);
@@ -28,11 +29,9 @@ function App() {
             path="/login"
             element={<LogIn setOnHeader={setOnHeader} />}
           ></Route>
-          <Route path="/testpage" element={<TestPage />}></Route>
+          <Route path="/" element={<Main />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
-          <Route path="/signup" element={<SignupPage></SignupPage>} />
-          <Route path="/" element={<ScheduleTest></ScheduleTest>}></Route>
-
+          <Route path="/userinfo" element={<UserInfo />} />
           {/* GMU경로 */}
           <Route path="/plan/:id" element={<Calendars></Calendars>} />
           <Route
@@ -45,7 +44,6 @@ function App() {
             path="/planModify/:id"
             element={<PlanModifyPage></PlanModifyPage>}
           />
-          <Route path="/mypage" element={<MyPage />} />
           <Route path="/editmypage" element={<EditProfile />} />
         </Routes>
       </BrowserRouter>

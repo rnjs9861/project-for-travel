@@ -4,10 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Map from "./Map";
 import MapMobile from "./MapMobile";
+import ALOTlogo from "../../images/ALOTlogo.png";
 import { deletePlan, getPlan, updatePlan } from "../../apis/gmu/planApi";
 
 const PlanModify = () => {
-  const { id: tourId } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [tourTitle, setTourTitle] = useState("");
@@ -20,52 +21,45 @@ const PlanModify = () => {
   useEffect(() => {
     const fetchPlan = async () => {
       try {
-        const response = await getPlan(tourId);
-        const planData = response.resultData;
-
-        if (planData) {
-          setTourTitle(planData.title || "");
-          setTourStartDay(planData.tourStartDay || "");
-          setTourFinishDay(planData.tourFinishDay || "");
-          setTourLocation(planData.tourLocation || "");
-          setTourBudget(planData.tourBudget || "");
-        } else {
-          console.error("Plan data is invalid:", planData);
-        }
+        const response = await getPlan(id);
+        const planData = response.data;
+        setTourTitle(planData.tourTitle);
+        setTourStartDay(planData.tourStartDay);
+        setTourFinishDay(planData.tourFinishDay);
+        setTourLocation(planData.tourLocation);
+        setTourBudget(planData.tourBudget);
       } catch (error) {
-        console.error("Error loading plan:", error);
+        console.log(error);
       }
     };
 
     fetchPlan();
-  }, [tourId]);
+  }, [id]);
 
   useEffect(() => {
-    if (tourLocation) {
-      const timerId = setTimeout(() => {
-        axios
-          .get(
-            `https://nominatim.openstreetmap.org/search?format=json&q=${tourLocation}`,
-          )
-          .then(response => {
-            const data = response.data;
-            if (data && data.length > 0) {
-              const { lat, lon } = data[0];
-              setMapCenter([lat, lon]);
-            }
-          })
-          .catch(error => console.log("Error fetching map data:", error));
-      }, 500);
+    const timerId = setTimeout(() => {
+      axios
+        .get(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${tourLocation}`
+        )
+        .then((response) => {
+          const data = response.data;
+          if (data && data.length > 0) {
+            const { lat, lon } = data[0];
+            setMapCenter([lat, lon]);
+          }
+        })
+        .catch((error) => console.log(error));
+    }, 500);
 
-      return () => clearTimeout(timerId);
-    }
+    return () => clearTimeout(timerId);
   }, [tourLocation]);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const updatedPlan = {
-      title: tourTitle,
+      tourTitle,
       tourStartDay,
       tourFinishDay,
       tourLocation,
@@ -73,8 +67,8 @@ const PlanModify = () => {
     };
 
     try {
-      await updatePlan(tourId, updatedPlan);
-      navigate(`/plan/${tourId}`); // 데이터 저장 후 캘린더 페이지로 리다이렉트
+      await updatePlan(id, updatedPlan);
+      navigate(`/plan/${id}`);
     } catch (error) {
       console.log("Error updating plan:", error);
     }
@@ -82,7 +76,7 @@ const PlanModify = () => {
 
   const handleDelete = async () => {
     try {
-      await deletePlan(tourId);
+      await deletePlan(id);
       navigate("/");
     } catch (error) {
       console.log("Error deleting plan:", error);
@@ -106,7 +100,7 @@ const PlanModify = () => {
                   name="tourTitle"
                   placeholder="여행 계획 제목을 입력하세요"
                   value={tourTitle}
-                  onChange={e => setTourTitle(e.target.value)}
+                  onChange={(e) => setTourTitle(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -119,7 +113,18 @@ const PlanModify = () => {
                   name="tourLocation"
                   placeholder="목적지를 입력하세요"
                   value={tourLocation}
-                  onChange={e => setTourLocation(e.target.value)}
+                  onChange={(e) => {
+                    setTourLocation(e.target.value);
+                    fetch(`/search?format=json&q=${e.target.value}`)
+                      .then((response) => response.json())
+                      .then((data) => {
+                        if (data && data.length > 0) {
+                          const { lat, lon } = data[0];
+                          setMapCenter([lat, lon]);
+                        }
+                      })
+                      .catch((error) => console.log(error));
+                  }}
                   required
                 />
               </FormFactor>
@@ -134,7 +139,7 @@ const PlanModify = () => {
                   id="tourStartDay"
                   name="tourStartDay"
                   value={tourStartDay}
-                  onChange={e => setTourStartDay(e.target.value)}
+                  onChange={(e) => setTourStartDay(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -146,7 +151,7 @@ const PlanModify = () => {
                   id="tourFinishDay"
                   name="tourFinishDay"
                   value={tourFinishDay}
-                  onChange={e => setTourFinishDay(e.target.value)}
+                  onChange={(e) => setTourFinishDay(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -159,7 +164,7 @@ const PlanModify = () => {
                   name="tourBudget"
                   placeholder="예산을 입력하세요"
                   value={tourBudget}
-                  onChange={e => setTourBudget(e.target.value)}
+                  onChange={(e) => setTourBudget(e.target.value)}
                   required
                 />
               </FormFactor>
@@ -178,16 +183,28 @@ const PlanModify = () => {
 
 export default PlanModify;
 
-// Styled-components
-
 const Wrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 `;
 
+const Header = styled.header`
+  h1 {
+    background-color: blue;
+    padding: 20px 20px 20px 20px;
+    margin: 0 auto;
+  }
+  img {
+    margin: auto;
+    display: block;
+    width: 300px;
+  }
+`;
+
 const Content = styled.div`
   display: flex;
+  flex-direction: column;
   overflow-x: hidden;
 `;
 
@@ -219,9 +236,7 @@ const RightSection = styled.div`
   z-index: 100000;
   transform: translateX(100%);
   opacity: 0;
-  transition:
-    transform 0.5s ease-in-out,
-    opacity 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
   animation: slideIn 0.5s ease-in-out 0.1s forwards;
 
   @keyframes slideIn {
@@ -275,23 +290,18 @@ const Button = styled.button`
 
 const DeleteButton = styled.button`
   padding: 10px 20px;
-  background-color: #d9534f;
+  background-color: #1e88e5;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 10px;
 
   &:hover {
-    background-color: #c9302c;
+    background-color: #005cb2;
   }
 `;
-
 const Footer = styled.div`
   z-index: 999999;
   background-color: blue;
-  margin: 0;
-  padding: 10px;
-  text-align: center;
-  color: white;
+  margin: 0px 0px 0px 0px;
 `;

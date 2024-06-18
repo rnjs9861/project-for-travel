@@ -1,12 +1,12 @@
 import axios from "axios";
 import { SERVER } from "../config";
 
-// export const postAccount = async signupData => {
+// export const postAccount = async (signupData) => {
 //   const response = await axios.post(`${SERVER}/sign-up`, signupData);
 //   return response.data;
 // };
 
-// export const checkDuplicateId = async userId => {
+// export const checkDuplicateId = async (userId) => {
 //   const response = await axios.get(`${SERVER}/백엔드?userId=${userId}`);
 //   return response.data.isDuplicate;
 // };

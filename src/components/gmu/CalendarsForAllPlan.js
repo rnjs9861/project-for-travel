@@ -3,8 +3,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import styled from "styled-components";
+import { getAllEvents, getAllPlans } from "../../apis/gmu/planCalendar"; // getAllPlans API 가져오기
 import ALOTlogo from "../../images/ALOTlogo.png";
-import { getAllEvents, getAllPlans } from "../../apis/gmu/planApi";
 
 const CalendarsForAllPlan = () => {
   const [events, setEvents] = useState([]);
@@ -69,7 +69,6 @@ const CalendarsForAllPlan = () => {
         <img src={ALOTlogo} alt="로고" />
       </Header> */}
       {/* <Body> */}
-
       <CalendarContainer>
         <Calendar>
           <FullCalendar
@@ -110,8 +109,6 @@ const CalendarsForAllPlan = () => {
         </EventModalWrap>
       </CalendarContainer>
       {/* </Body> */}
-
-
     </>
   );
 };
