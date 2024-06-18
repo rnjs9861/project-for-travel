@@ -3,9 +3,13 @@ import Map from "./Map";
 import axios from "axios";
 import styled from "styled-components";
 import MapMobile from "./MapMobile";
-import ALOTlogo from "../../images/ALOTlogo.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { postPlan } from "../../apis/gmu/planApi";
+import ad1 from "../../images/ad/ad1.png";
+import ad2 from "../../images/ad/ad2.png";
+import ad3 from "../../images/ad/ad3.jpg";
+import ad4 from "../../images/ad/ad4.jpg";
+import ad5 from "../../images/ad/ad5.jpg";
 
 const Plan = () => {
   const [tourTitle, setTourTitle] = useState("");
@@ -14,8 +18,23 @@ const Plan = () => {
   const [tourLocation, setTourLocation] = useState("");
   const [tourBudget, setTourBudget] = useState("");
   const [mapCenter, setMapCenter] = useState([37.5665, 126.978]);
+  const [dateError, setDateError] = useState(""); // 날짜 오류 상태 추가
 
-  const { userId } = useParams();
+  const [randomAd, setRandomAd] = useState();
+
+  const adArray = [ad1, ad2, ad3, ad4, ad5];
+
+  useEffect(() => {
+    window.onload = showImage(randomAd);
+  }, []);
+
+  const showImage = () => {
+    const imgNum = Math.floor(Math.random() * 5);
+    console.log(imgNum);
+
+    setRandomAd(adArray[imgNum]);
+    setTimeout(showImage, 10000);
+  };
 
   const navigate = useNavigate();
 
@@ -40,30 +59,57 @@ const Plan = () => {
     return () => clearTimeout(timerId);
   }, [tourLocation]);
 
+  // 날짜 검증 useEffect 추가
+  useEffect(() => {
+    if (tourStartDay && tourFinishDay && tourStartDay > tourFinishDay) {
+      setDateError("시작일은 종료일보다 나중일 수 없습니다.");
+    } else {
+      setDateError("");
+    }
+  }, [tourStartDay, tourFinishDay]);
+
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const userId = localStorage.getItem("user"); // 로컬 스토리지에서 user_id 가져오기
+    const userId = localStorage.getItem("user");
     if (!userId) {
-      alert("로그인 정보가 없습니다. 다시 로그인 해주세요."); //navi로 로그인으로 이동시키기
+      alert("로그인 정보가 없습니다. 다시 로그인 해주세요.");
+      return;
+    }
+
+    if (dateError) {
+      alert(dateError); // 오류가 있으면 제출을 막음
       return;
     }
 
     const writeData = {
-      userId: userId, //user DB의 pk
+      userId: userId,
       title: tourTitle,
       tourLocation,
       tourStartDay,
       tourFinishDay,
-      tourColor: "#FFFFFF",
+      tourColor: getRandomColor(),
       tourBudget,
     };
-    console.log(userId);
 
     try {
-      const planData = await postPlan(writeData);
-      console.log(planData);
-      navigate(`/plan/${planData.id}`);
+      const response = await postPlan(writeData);
+      const planId = response.resultData;
+
+      if (planId) {
+        navigate(`/plan/${planId}`);
+      } else {
+        console.error("Invalid plan data", response);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -90,7 +136,6 @@ const Plan = () => {
                   required
                 />
               </FormFactor>
-
               <FormFactor>
                 <Label htmlFor="destination">목적지</Label>
                 <Input
@@ -99,25 +144,13 @@ const Plan = () => {
                   name="tourLocation"
                   placeholder="목적지를 입력하세요"
                   value={tourLocation}
-                  onChange={e => {
-                    setTourLocation(e.target.value);
-                    fetch(`/search?format=json&q=${e.target.value}`)
-                      .then(response => response.json())
-                      .then(data => {
-                        if (data && data.length > 0) {
-                          const { lat, lon } = data[0];
-                          setMapCenter([lat, lon]);
-                        }
-                      })
-                      .catch(error => console.log(error));
-                  }}
+                  onChange={e => setTourLocation(e.target.value)}
                   required
                 />
               </FormFactor>
               <MapForMobile>
                 <MapMobile center={mapCenter} destination={tourLocation} />
               </MapForMobile>
-
               <FormFactor>
                 <Label htmlFor="start-date">시작일</Label>
                 <Input
@@ -129,7 +162,6 @@ const Plan = () => {
                   required
                 />
               </FormFactor>
-
               <FormFactor>
                 <Label htmlFor="end-date">끝나는 날</Label>
                 <Input
@@ -141,7 +173,8 @@ const Plan = () => {
                   required
                 />
               </FormFactor>
-
+              {dateError && <ErrorMessage>{dateError}</ErrorMessage>}{" "}
+              {/* 오류 메시지 표시 */}
               <FormFactor>
                 <Label htmlFor="budget">예산</Label>
                 <Input
@@ -156,35 +189,42 @@ const Plan = () => {
               </FormFactor>
               <Button type="submit">저장</Button>
             </Form>
+            <br />
+            <Ad>
+              <AdImg
+                src={randomAd}
+                className="ad1"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
+            </Ad>
           </RightSection>
         </Content>
       </main>
-      <Footer>
-        <p>푸터</p>
-      </Footer>
     </Wrapper>
   );
 };
 
 export default Plan;
 
-const Wrapper = styled.div`
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+// Styled-components
+
+const Ad = styled.div`
+  border-radius: 5px;
 `;
 
-const Header = styled.header`
-  h1 {
-    background-color: blue;
-    padding: 20px 20px 20px 20px;
-    margin: 0 auto;
-  }
-  img {
-    margin: auto;
-    display: block;
-    width: 300px;
-  }
+const AdImg = styled.img`
+  border-radius: 5px;
+  object-fit: fill;
+  width: 100%;
+  height: 100%;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 `;
 
 const Content = styled.div`
@@ -237,6 +277,7 @@ const RightSection = styled.div`
   @media (max-width: 760px) {
     position: relative;
     margin: 0 auto;
+    height: 1000px;
   }
 `;
 
@@ -274,8 +315,15 @@ const Button = styled.button`
     background-color: #005cb2;
   }
 `;
-const Footer = styled.div`
-  z-index: 999999;
-  background-color: blue;
-  margin: 0px 0px 0px 0px;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+  margin-bottom: 10px;
 `;
+
+// const Footer = styled.div`
+//   z-index: 999999;
+//   background-color: blue;
+//   margin: 0px 0px 0px 0px;
+// `;

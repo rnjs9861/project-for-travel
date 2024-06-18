@@ -32,19 +32,16 @@ function App() {
           <Route path="/" element={<Main />}></Route>
           <Route path="/checklist" element={<CheckList></CheckList>}></Route>
           <Route path="/userinfo" element={<UserInfo />} />
+
           {/* GMU경로 */}
-          <Route path="/plan/:id" element={<Calendars></Calendars>} />
-          <Route
-            path="/allSchedule"
-            element={<CalendarsForAllPlan></CalendarsForAllPlan>}
-          />
-          <Route path="/plan" element={<PlanPage></PlanPage>} />
-          <Route path="/signup" element={<SignupPage></SignupPage>} />
-          <Route
-            path="/planModify/:id"
-            element={<PlanModifyPage></PlanModifyPage>}
-          />
-          <Route path="/editmypage" element={<EditProfile />} />
+          <Route path="/plan/:id" element={<Calendars />} />
+          <Route path="/allSchedule" element={<CalendarsForAllPlan />} />
+          <Route path="/plan" element={<PlanPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/planModify/:id" element={<PlanModifyPage />} />
+          {/* <Route path="/mypage" element={<MyPage />} /> */}
+          {/* <Route path="/editmypage" element={<EditProfile />} /> */}
+          {/* <Route path="/detail/:id" element={<Detail />} /> */}
         </Routes>
       </BrowserRouter>
     </UserInfoProvider>

@@ -137,7 +137,8 @@ const Signup = () => {
     <Wrapper>
       <Container>
         <SignupForm onSubmit={handleSubmit}>
-          <h1>회원가입</h1>
+          <H1>회원가입</H1>
+          <br />
           <InputField>
             <Label>아이디</Label>
             <Input type="text" value={userId} onChange={handleIdChange} />
@@ -193,6 +194,11 @@ const Signup = () => {
 export default Signup;
 
 const Wrapper = styled.div``;
+
+const H1 = styled.h1`
+  font-weight: bold;
+  font-size: 24px;
+`;
 
 const Header = styled.div`
   h1 {

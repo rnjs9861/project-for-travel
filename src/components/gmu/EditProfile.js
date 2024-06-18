@@ -29,7 +29,7 @@ const EditProfile = () => {
     fetchUserInfo();
   }, []);
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async e => {
     e.preventDefault();
 
     const updatedData = {
@@ -65,7 +65,7 @@ const EditProfile = () => {
               <Input
                 type="text"
                 value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                onChange={e => setUserName(e.target.value)}
               />
             </InputField>
             <InputField>
@@ -73,7 +73,7 @@ const EditProfile = () => {
               <Input
                 type="email"
                 value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
+                onChange={e => setUserEmail(e.target.value)}
               />
             </InputField>
             <Button type="submit">수정</Button>

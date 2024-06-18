@@ -2,121 +2,182 @@ import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import EventModal from "./EventModal";
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
-import { getAllEvents, getOnePlan } from "../../apis/gmu/planCalendar";
-import ALOTlogo from "../../images/ALOTlogo.png";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { SERVER } from "../../apis/config";
+import EventModalForAll from "./EventModalForAll";
 
-const Calendars = () => {
-  const { id: tourId } = useParams();
+// 랜덤 색상 생성 함수
+const getRandomColor = () => {
+  const colors = [
+    "#FF0000",
+    "#FFA500",
+    "#1e88e5",
 
-  const [selectedDate, setSelectedDate] = useState(null);
+    "#008000",
+    "#0000FF",
+    "#4B0082",
+    "#EE82EE",
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+// API 호출을 위한 함수
+const getAllPlans = async userId => {
+  try {
+    const response = await axios.get("/api/tour", {
+      params: { signed_user_id: userId },
+    });
+    return response.data.resultData; // resultData에서 배열을 반환
+  } catch (error) {
+    console.error("Failed to fetch plans", error);
+    throw error;
+  }
+};
+
+const getEventsForDate = async (tourId, date) => {
+  try {
+    const response = await axios.get(
+      `${SERVER}/api/tour/schedule/tourScheduleList?tour_id=${tourId}&tour_schedule_day=${date}`,
+    );
+    return response.data.resultData.map(event => ({
+      tourScheduleId: event.tourScheduleId,
+      title: event.title,
+      start: `${event.tourScheduleDay}T${event.tourScheduleStart}`,
+      end: `${event.tourScheduleDay}T${event.tourScheduleEnd}`,
+      tourScheduleDay: event.tourScheduleDay,
+      description: event.contents,
+      expense: event.cost,
+    }));
+  } catch (error) {
+    console.error("Error loading events for selected date:", error);
+    return [];
+  }
+};
+
+const CalendarsForAllPlan = () => {
   const [events, setEvents] = useState([]);
-  const [selectedEvents, setSelectedEvents] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [dateEvents, setDateEvents] = useState([]);
+  const [selectedTourId, setSelectedTourId] = useState(null); // 선택된 투어 ID 상태 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const loadTours = async () => {
+    const loadAllData = async () => {
       try {
-        const tours = await getOnePlan(tourId);
-        setEvents(tours);
+        const userId = localStorage.getItem("user");
+
+        if (!userId) {
+          console.error("User ID not found in localStorage");
+          return;
+        }
+
+        const plans = await getAllPlans(userId);
+
+        if (!plans || !Array.isArray(plans)) {
+          console.error("Plans data is not an array or is undefined:", plans);
+          return;
+        }
+
+        const planEvents = plans.map(plan => ({
+          id: plan.tourId,
+          title: plan.title,
+          start: plan.tourStartDay,
+          end: new Date(plan.tourFinishDay).toISOString(),
+          backgroundColor: getRandomColor(),
+          extendedProps: {
+            location: plan.tourLocation,
+          },
+        }));
+
+        setEvents(planEvents);
       } catch (error) {
-        console.error("Error loading tours:", error);
+        console.error("Error loading data:", error);
       }
     };
 
-    loadTours();
-  }, [tourId]);
+    loadAllData();
+  }, []);
 
-  useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const events = await getAllEvents(tourId);
-        setEvents(prevEvents => [...prevEvents, ...events]);
-      } catch (error) {
-        console.error("Error loading events:", error);
-      }
-    };
-    loadEvents();
-  }, [tourId]);
-
-  useEffect(() => {
-    if (selectedDate) {
-      const filteredEvents = events.filter(
-        event => event.start.split("T")[0] === selectedDate,
-      );
-      const sortedEvents = filteredEvents.sort((a, b) => {
-        const aTime = new Date(a.start).getTime();
-        const bTime = new Date(b.start).getTime();
-        return aTime - bTime;
-      });
-      setSelectedEvents(sortedEvents);
-    }
-  }, [selectedDate, events]);
-
-  const handleDateClick = info => {
+  const handleDateClick = async info => {
     setSelectedDate(info.dateStr);
+
+    // 선택된 날짜에 해당하는 투어를 필터링하여 가져옵니다
+    const filteredTours = events.filter(event => {
+      const eventStart = new Date(event.start).toISOString().split("T")[0];
+      const eventEnd = new Date(event.end).toISOString().split("T")[0];
+      return eventStart <= info.dateStr && eventEnd >= info.dateStr;
+    });
+
+    if (filteredTours.length === 0) {
+      console.error("No tours found for the selected date");
+      setDateEvents([]);
+      return;
+    }
+
+    const tourId = filteredTours[0].id; // 필터된 첫 번째 투어의 tourId 사용
+
+    setSelectedTourId(tourId); // 선택된 tourId 상태 업데이트
+
+    try {
+      const eventsForDate = await getEventsForDate(tourId, info.dateStr);
+      setDateEvents(eventsForDate);
+    } catch (error) {
+      console.error("Error loading events for selected date:", error);
+    }
   };
 
   const handleEventSubmit = event => {
-    const formattedEvent = {
-      ...event,
-      start: `${event.date}T${event.start}`,
-      end: `${event.date}T${event.end}`,
-    };
-    setEvents(prevEvents => [...prevEvents, formattedEvent]);
+    setEvents(prevEvents => [...prevEvents, event]);
+  };
+
+  const handleEventClick = info => {
+    const eventId = info.event.id;
+    navigate(`/plan/${eventId}`);
   };
 
   return (
     <>
-      <Body>
-        <Link to={`/planModify/${tourId}`}>
-          <Button>계획 수정하기</Button>
-        </Link>
-        <CalendarContainer>
-          <Calendar>
-            <FullCalendar
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              dateClick={handleDateClick}
-              events={events}
-            />
-          </Calendar>
+      <CalendarContainer>
+        <Calendar>
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            dateClick={handleDateClick}
+            events={events}
+            eventClick={handleEventClick}
+            eventContent={renderEventContent}
+          />
+        </Calendar>
 
-          <EventModalWrap>
-            {selectedDate && (
-              <>
-                <SelectedDate>{selectedDate} 일정 </SelectedDate>
-                <EventModal
-                  date={selectedDate}
-                  onSubmit={handleEventSubmit}
-                  tourId={tourId}
-                  event={null}
-                />
-                {selectedEvents.map((event, index) => (
-                  <EventModal
-                    key={index}
-                    date={event.date}
-                    event={event}
-                    tourId={tourId}
-                  />
-                ))}
-              </>
-            )}
-          </EventModalWrap>
-        </CalendarContainer>
-      </Body>
+        <EventModalWrap>
+          {selectedDate && (
+            <>
+              <SelectedDate>{selectedDate} 일정</SelectedDate>
+              <EventModalForAll
+                date={selectedDate}
+                onSubmit={handleEventSubmit}
+                events={dateEvents}
+                tourId={selectedTourId}
+              />
+            </>
+          )}
+        </EventModalWrap>
+      </CalendarContainer>
     </>
   );
 };
 
-export default Calendars;
+const renderEventContent = eventInfo => (
+  <div>
+    <i>{eventInfo.event.title}</i>
+  </div>
+);
+
+export default CalendarsForAllPlan;
 
 // Styled-components
-
-const Body = styled.div`
-  padding-top: 180.24px;
-`;
 
 const CalendarContainer = styled.div`
   display: flex;
@@ -141,15 +202,10 @@ const SelectedDate = styled.div`
   color: #333;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #1e88e5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #005cb2;
-  }
+const EventSummary = styled.div`
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
 `;
