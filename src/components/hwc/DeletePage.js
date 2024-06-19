@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from "react";
-import Modal from "react-modal";
-import styled from "styled-components";
+import React, { useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import Modal from "react-modal";
 import { SERVER } from "../../apis/config";
+import { useNavigate } from "react-router-dom";
 
 // react-modal을 사용할 때, 애플리케이션의 루트 요소를 설정합니다.
 Modal.setAppElement("#root");
 
-const DeleteModify = ({ tourId, tourScheduleId, onDelete }) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태
+// axios.interceptors 설정: 전역에서 한 번만 설정
+axios.interceptors.response.use(
+  response => {
+    console.log("Response data:", response.data);
+    return response;
+  },
+  error => {
+    console.error("Request failed:", error);
+    return Promise.reject(error);
+  },
+);
 
-  // useEffect를 사용하여 props를 출력해 봅니다.
-  useEffect(() => {
-    console.log("tourId:", tourId);
-    console.log("tourScheduleId:", tourScheduleId);
-  }, [tourId, tourScheduleId]);
+const DeletePage = ({ tourId, tourScheduleId, fetchTourData }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -23,23 +31,40 @@ const DeleteModify = ({ tourId, tourScheduleId, onDelete }) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    setErrorMessage(""); // 모달 닫을 때 에러 메시지 초기화
+    setErrorMessage("");
   };
 
   const handleDelete = async () => {
     try {
-      console.log(
-        `${SERVER}/api/tour/schedule?tour_id=${tourId}&tour_schedule_id=${tourScheduleId}`,
-      );
+      // Validate tourId and tourScheduleId before proceeding
+      if (!tourId || !tourScheduleId) {
+        setErrorMessage("삭제에 실패하였습니다. 다시 시도해주세요.");
+        return;
+      }
+
       const response = await axios.delete(
         `${SERVER}/api/tour/schedule?tour_id=${tourId}&tour_schedule_id=${tourScheduleId}`,
       );
-      console.log("성공적으로 삭제하였습니다.", response.data);
-      onDelete();
-      closeModal();
+
+      // Log server response to console
+      console.log("Delete response:", response);
+
+      // Check for different status codes and handle accordingly
+      if (response.status === 200 || response.status === 204) {
+        console.log("성공적으로 삭제하였습니다.", response.data);
+        fetchTourData(); // 삭제 후 데이터 다시 불러오기
+        closeModal();
+        navigate("/"); // 메인 페이지로 리다이렉트
+      } else {
+        setErrorMessage("삭제에 실패하였습니다. 다시 시도해 주세요.");
+      }
     } catch (error) {
-      console.error("삭제에 실패하였습니다.", error);
+      console.error(
+        "삭제에 실패하였습니다.",
+        error.response?.data || error.message || error,
+      );
       setErrorMessage("삭제에 실패하였습니다. 다시 시도해 주세요.");
+      console.log(error);
     }
   };
 
@@ -69,7 +94,7 @@ const DeleteModify = ({ tourId, tourScheduleId, onDelete }) => {
         }}
       >
         <ModalContent>
-          <h2>정말 삭제하시겠습니까?</h2>
+          <h2>정말 이 일정을 삭제하시겠습니까?</h2>
           {errorMessage && <Error>{errorMessage}</Error>}
           <ButtonGroup>
             <ConfirmButton onClick={handleDelete}>삭제</ConfirmButton>
@@ -81,7 +106,7 @@ const DeleteModify = ({ tourId, tourScheduleId, onDelete }) => {
   );
 };
 
-export default DeleteModify;
+export default DeletePage;
 
 const DeleteButton = styled.button`
   padding: 10px;

@@ -7,7 +7,7 @@ import Modal from "react-modal";
 // Modal을 사용할 때, 애플리케이션의 루트 요소를 설정합니다.
 Modal.setAppElement("#root");
 
-const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
+const UpdatePage = ({ tourData, onUpdate, onCancel }) => {
   const [formData, setFormData] = useState({
     tourScheduleDay: "",
     tourScheduleStart: "",
@@ -29,7 +29,6 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
         title: tourData.title || "",
         contents: tourData.contents || "",
         cost: tourData.cost || "",
-        tourColor: tourData.tourColor || "#007bff",
       });
     }
   }, [tourData]);
@@ -93,7 +92,6 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
       title: tourData.title || "",
       contents: tourData.contents || "",
       cost: tourData.cost || "",
-      tourColor: tourData.tourColor || "#007bff",
     });
     onCancel();
     closeModal(); // 취소 후 Modal 닫기
@@ -105,6 +103,7 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    setErrorMessage(""); // Modal 닫을 때 에러 메시지 초기화
   };
 
   return (
@@ -118,25 +117,25 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
         placeholder="제목"
       />
       <Input
-        type="text"
+        type="date"
         name="tourScheduleDay"
         value={formData.tourScheduleDay}
         onChange={handleChange}
         placeholder="작성 일자"
       />
       <Input
-        type="text"
+        type="time"
         name="tourScheduleStart"
         value={formData.tourScheduleStart}
         onChange={handleChange}
-        placeholder="시작일"
+        placeholder="시작 시간"
       />
       <Input
-        type="text"
+        type="time"
         name="tourScheduleEnd"
         value={formData.tourScheduleEnd}
         onChange={handleChange}
-        placeholder="종료일"
+        placeholder="종료 시간"
       />
       <Input
         type="number"
@@ -151,13 +150,6 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
         value={formData.contents}
         onChange={handleChange}
         placeholder="내용"
-      />
-      <Input
-        type="text"
-        name="tourColor"
-        value={formData.tourColor}
-        onChange={handleChange}
-        placeholder="일정표 색상"
       />
       <Button type="button" onClick={openModal}>
         수정 완료
@@ -175,7 +167,7 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             margin: "10px",
-            width: "300px",
+            width: "200px",
             height: "150px",
             border: "20px",
             borderRadius: "8px",
@@ -196,7 +188,7 @@ const UpdatePages = ({ tourData, onUpdate, onCancel }) => {
   );
 };
 
-export default UpdatePages;
+export default UpdatePage;
 
 const FormContainer = styled.form`
   display: flex;

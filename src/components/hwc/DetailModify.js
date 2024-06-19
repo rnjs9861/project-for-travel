@@ -4,24 +4,24 @@ import { useParams } from "react-router-dom";
 import { SERVER } from "../../apis/config";
 import styled from "styled-components";
 import UpdatePages from "./UpdatePages";
-import DeleteModify from "./DeletePage";
+import DeletePage from "./DeletePage";
 
-const DetailModify = () => {
+const DetailModify = ({
+  initialTourData,
+  fetchTourData: parentFetchTourData,
+}) => {
   const { tourScheduleId } = useParams();
-  const [tourData, setTourData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [tourData, setTourData] = useState(initialTourData);
+  const [loading, setLoading] = useState(!initialTourData);
   const [isEditing, setIsEditing] = useState(false);
 
-  const fetchTourData = async () => {
+  const fetchData = async () => {
     if (!tourScheduleId) return;
 
     try {
       const response = await axios.get(
         `${SERVER}/api/tour/schedule/${tourScheduleId}`,
       );
-
-      console.log("tourScheduleId:", tourScheduleId);
-      console.log("API Response:", response.data);
 
       const { data } = response;
 
@@ -30,32 +30,17 @@ const DetailModify = () => {
       } else {
         setTourData(data.resultData);
       }
+
+      setLoading(false); // Set loading to false after successful fetch
     } catch (error) {
       console.error("Error fetching tour data:", error);
-    } finally {
-      setLoading(false);
+      setLoading(false); // Set loading to false in case of error as well
     }
   };
 
   useEffect(() => {
-    fetchTourData();
+    fetchData();
   }, [tourScheduleId]);
-
-  const handleDelete = async () => {
-    if (!tourData) return;
-
-    const { tourId, tourScheduleId } = tourData;
-
-    try {
-      const response = await axios.delete(
-        `${SERVER}/api/tour/schedule?tour_id=${tourId}&tour_schedule_id=${tourScheduleId}`,
-      );
-      console.log("성공적으로 삭제하였습니다.", response.data);
-      fetchTourData(); // 삭제 후 데이터 다시 불러오기
-    } catch (error) {
-      console.error("삭제에 실패하였습니다.", error);
-    }
-  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -63,7 +48,7 @@ const DetailModify = () => {
 
   const handleUpdate = () => {
     setIsEditing(false);
-    fetchTourData(); // Re-fetch data after update
+    fetchData(); // Re-fetch data after update
   };
 
   const handleCancel = () => {
@@ -85,16 +70,15 @@ const DetailModify = () => {
           <Item>
             <Title>제목(Title): {tourData.tourScheduleTitle}</Title>
             <Detail>작성 일자(Date Created): {tourData.tourScheduleDay}</Detail>
-            <Detail>시작일(Start Day): {tourData.tourScheduleStart}</Detail>
-            <Detail>종료일(Finish Day): {tourData.tourScheduleEnd}</Detail>
+            <Detail>시작 시간(Start Time): {tourData.tourScheduleStart}</Detail>
+            <Detail>종료 시간(Finish Time): {tourData.tourScheduleEnd}</Detail>
             <Detail>비용(Cost): {tourData.cost}</Detail>
             <Detail>내용(Contents): {tourData.contents}</Detail>
-            <Detail>일정표 색상(Schedule Color): {tourData.tourColor}</Detail>
             <Button onClick={handleEditClick}>수정</Button>
-            <DeleteModify
+            <DeletePage
               tourId={tourData.tourId}
               tourScheduleId={tourData.tourScheduleId}
-              onDelete={handleDelete}
+              onDelete={fetchData}
             />
           </Item>
         )
