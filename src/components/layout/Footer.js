@@ -17,7 +17,7 @@ const Footer = () => {
 export default Footer;
 
 const FooterBody = styled.div`
-  margin: 0 auto;
+  margin: 20px auto 0;
   background-color: skyblue;
   height: 200px;
   padding: 20px 0px;

@@ -27,16 +27,14 @@ const CheckList = () => {
   const handleOnSubmit = async e => {
     e.preventDefault();
     if (list.some(item => item.title === onAdd)) {
-      setMessage("중복된 목록이 존재합니다");
+      return setMessage("중복된 목록이 존재합니다");
+    }
+    if (onAdd === "") {
+      return setMessage("추가할 물건을 기입해주세요");
     } else {
-      if (onAdd === "") {
-        return setMessage("추가할 물건을 기입해주세요");
-      }
       const newItem = { tour_id: selectedTourId, title: onAdd, checked: false };
       setList([...list, newItem]);
       setOnAdd("");
-      setMessage("");
-
       try {
         const result = await postList({ tourId: selectedTourId, title: onAdd });
         setMessage(result.data.resultMsg);
@@ -52,6 +50,8 @@ const CheckList = () => {
       const res = await delList(selectedCheckListId);
       if (res.status === 200) {
         setList(list.filter((_, i) => i !== index));
+        setMessage("삭제되었습니다");
+        await reLoadList();
       }
     } catch (error) {
       console.error(error);
@@ -69,7 +69,22 @@ const CheckList = () => {
     }
   };
 
+  const reLoadList = async () => {
+    const resultCheck = await getCheckList(selectedTourId);
+    console.log(resultCheck);
+    const fetchedList = await resultCheck.data.resultData.map(item => ({
+      tour_id: item.checklistId,
+      title: item.title,
+      checked: item.checked,
+    }));
+    console.log(fetchedList);
+    setOnAdd("");
+    setList(fetchedList);
+    setIsTourIdSelected(true);
+  };
+
   const handleAllDel = async () => {
+    setMessage("");
     try {
       await allDel(selectedTourId);
       setList([]);
@@ -87,10 +102,9 @@ const CheckList = () => {
         title: item.title,
         checked: item.checked,
       }));
-      setOnAdd("")
+      setOnAdd("");
       setList(fetchedList);
       setIsTourIdSelected(true);
-      setMessage("");
     } catch (error) {
       console.error(error);
     }
