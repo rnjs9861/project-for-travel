@@ -35,12 +35,17 @@ const EventModalForAll = ({ date, onSubmit, events, tourId }) => {
       console.log("Saved Event:", savedEvent);
 
       onSubmit({
+        id: savedEvent.tourScheduleId,
         title: savedEvent.tourScheduleTitle,
         start: savedEvent.tourScheduleStart,
         end: savedEvent.tourScheduleEnd,
-        id: savedEvent.tourScheduleId,
         description: savedEvent.contents,
         expense: savedEvent.cost,
+        extendedProps: {
+          tourScheduleDay: date,
+          tourScheduleTitle: savedEvent.tourScheduleTitle,
+          tourScheduleStart: savedEvent.tourScheduleStart,
+        },
       });
     } catch (error) {
       console.error("Error saving event:", error);
@@ -83,11 +88,15 @@ const EventModalForAll = ({ date, onSubmit, events, tourId }) => {
 export default EventModalForAll;
 
 const Form = styled.div`
-  border: solid;
   border-radius: 10px;
   margin-top: 10px;
   padding: 10px 5px 5px 5px;
   background-color: white;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 `;
 
 const Time = styled.div`

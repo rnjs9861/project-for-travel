@@ -11,14 +11,13 @@ import EventModalForAll from "./EventModalForAll";
 // 랜덤 색상 생성 함수
 const getRandomColor = () => {
   const colors = [
-    "#FF0000",
-    "#FFA500",
+    // "#FF0000",
+    // "#FFA500",
     "#1e88e5",
-
-    "#008000",
-    "#0000FF",
-    "#4B0082",
-    "#EE82EE",
+    // "#008000",
+    // "#0000FF",
+    // "#4B0082",
+    // "#EE82EE",
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 };
@@ -29,7 +28,33 @@ const getAllPlans = async userId => {
     const response = await axios.get("/api/tour", {
       params: { signed_user_id: userId },
     });
-    return response.data.resultData; // resultData에서 배열을 반환
+
+    return response.data.resultData
+      .map(plan => {
+        // 날짜 유효성 검사
+        const tourStartDay = new Date(plan.tourStartDay);
+        const tourFinishDay = new Date(plan.tourFinishDay);
+
+        // 날짜가 유효하지 않은 경우 처리
+        if (isNaN(tourStartDay.getTime()) || isNaN(tourFinishDay.getTime())) {
+          console.error("Invalid date found:", plan);
+          return null; // 잘못된 데이터를 무시
+        }
+
+        return {
+          id: plan.tourId,
+          title: plan.title,
+          start: tourStartDay.toISOString(),
+          end: tourFinishDay.toISOString(),
+          backgroundColor: getRandomColor(),
+          extendedProps: {
+            location: plan.tourLocation,
+            tourScheduleStart: plan.tourStartDay,
+            tourScheduleTitle: plan.title,
+          },
+        };
+      })
+      .filter(plan => plan !== null); // 유효한 데이터만 반환
   } catch (error) {
     console.error("Failed to fetch plans", error);
     throw error;
@@ -80,18 +105,7 @@ const CalendarsForAllPlan = () => {
           return;
         }
 
-        const planEvents = plans.map(plan => ({
-          id: plan.tourId,
-          title: plan.title,
-          start: plan.tourStartDay,
-          end: new Date(plan.tourFinishDay).toISOString(),
-          backgroundColor: getRandomColor(),
-          extendedProps: {
-            location: plan.tourLocation,
-          },
-        }));
-
-        setEvents(planEvents);
+        setEvents(plans);
       } catch (error) {
         console.error("Error loading data:", error);
       }
@@ -105,9 +119,20 @@ const CalendarsForAllPlan = () => {
 
     // 선택된 날짜에 해당하는 투어를 필터링하여 가져옵니다
     const filteredTours = events.filter(event => {
-      const eventStart = new Date(event.start).toISOString().split("T")[0];
-      const eventEnd = new Date(event.end).toISOString().split("T")[0];
-      return eventStart <= info.dateStr && eventEnd >= info.dateStr;
+      const eventStart = new Date(event.extendedProps.tourScheduleStart);
+      const eventEnd = new Date(event.end);
+
+      // 날짜가 유효하지 않은 경우 처리
+      if (isNaN(eventStart.getTime()) || isNaN(eventEnd.getTime())) {
+        console.error("Invalid event date found:", event);
+        return false;
+      }
+
+      const eventStartDateStr = eventStart.toISOString().split("T")[0];
+      const eventEndDateStr = eventEnd.toISOString().split("T")[0];
+      return (
+        eventStartDateStr <= info.dateStr && eventEndDateStr >= info.dateStr
+      );
     });
 
     if (filteredTours.length === 0) {
@@ -123,6 +148,24 @@ const CalendarsForAllPlan = () => {
     try {
       const eventsForDate = await getEventsForDate(tourId, info.dateStr);
       setDateEvents(eventsForDate);
+
+      // 이벤트들을 달력에 추가하여 표시
+      setEvents(prevEvents => [
+        ...prevEvents.filter(
+          event => event.extendedProps.tourScheduleDay !== info.dateStr,
+        ), // 같은 날짜의 이벤트들을 먼저 제거
+        ...eventsForDate.map(ev => ({
+          id: ev.tourScheduleId,
+          title: ev.tourScheduleTitle,
+          start: ev.start,
+          end: ev.end,
+          backgroundColor: getRandomColor(),
+          extendedProps: {
+            description: ev.description,
+            expense: ev.expense,
+          },
+        })),
+      ]);
     } catch (error) {
       console.error("Error loading events for selected date:", error);
     }
@@ -169,15 +212,34 @@ const CalendarsForAllPlan = () => {
   );
 };
 
-const renderEventContent = eventInfo => (
-  <div>
-    <i>{eventInfo.event.title}</i>
-  </div>
-);
+const renderEventContent = eventInfo => {
+  const start = new Date(eventInfo.event.start);
+  const startTime =
+    start &&
+    !isNaN(start.getTime()) &&
+    start.getHours() !== 0 &&
+    start.getMinutes() !== 0
+      ? start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      : null;
+
+  return (
+    <Each>
+      {startTime && (
+        <>
+          <i>{startTime}</i>
+        </>
+      )}
+      &nbsp;&nbsp;&nbsp;
+      <strong>{eventInfo.event.title}</strong>
+    </Each>
+  );
+};
 
 export default CalendarsForAllPlan;
 
 // Styled-components
+
+const Each = styled.div``;
 
 const CalendarContainer = styled.div`
   display: flex;
