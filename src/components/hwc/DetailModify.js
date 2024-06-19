@@ -7,70 +7,99 @@ import UpdatePages from "./UpdatePages";
 import DeleteModify from "./DeletePage";
 
 const DetailModify = () => {
-  const { tourScheduleId } = useParams(); // useParams에서 tourScheduleId를 가져옴
+  const { tourScheduleId } = useParams();
   const [tourData, setTourData] = useState(null);
-  const [isUpdated, setIsUpdated] = useState(false); // 데이터 업데이트 상태 추가
-  const [IsDelete, setIsDelete] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    const fetchTourData = async () => {
-      if (!tourScheduleId) return; // tourScheduleId가 없으면 함수를 종료
+  const fetchTourData = async () => {
+    if (!tourScheduleId) return;
 
-      try {
-        // tourScheduleId를 사용하여 해당 스케줄의 데이터를 가져오는 API 요청
-        const response = await axios.get(
-          `${SERVER}/api/tour/schedule/${tourScheduleId}`,
-        );
+    try {
+      const response = await axios.get(
+        `${SERVER}/api/tour/schedule/${tourScheduleId}`,
+      );
 
-        console.log("tourScheduleId:", tourScheduleId); // tourScheduleId 출력
-        console.log("API Response:", response.data); // API 응답 데이터 출력
+      console.log("tourScheduleId:", tourScheduleId);
+      console.log("API Response:", response.data);
 
-        const { data } = response; // response에서 data를 추출
+      const { data } = response;
 
-        if (Array.isArray(data.resultData)) {
-          setTourData(data.resultData); // 배열 형태인 경우 바로 저장
-        } else {
-          setTourData([data.resultData]); // 단일 객체 형태인 경우 배열로 감싸서 저장
-        }
-      } catch (error) {
-        console.error("Error fetching tour data:", error);
-        console.error(error);
+      if (Array.isArray(data.resultData)) {
+        setTourData(data.resultData[0]); // Assuming you want the first item in the array
+      } else {
+        setTourData(data.resultData);
       }
-    };
-
-    fetchTourData(); // useEffect 내에서 함수를 호출해야 함
-  }, [tourScheduleId, isUpdated]); // useEffect의 의존성 배열에 tourScheduleId와 isUpdated 추가
-
-  const handleUpdate = () => {
-    setIsUpdated(!isUpdated); // 데이터 업데이트 상태 변경
+    } catch (error) {
+      console.error("Error fetching tour data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = () => {
-    setIsDelete(!IsDelete); // 데이터 삭제
+  useEffect(() => {
+    fetchTourData();
+  }, [tourScheduleId]);
+
+  const handleDelete = async () => {
+    if (!tourData) return;
+
+    const { tourId, tourScheduleId } = tourData;
+
+    try {
+      const response = await axios.delete(
+        `${SERVER}/api/tour/schedule?tour_id=${tourId}&tour_schedule_id=${tourScheduleId}`,
+      );
+      console.log("성공적으로 삭제하였습니다.", response.data);
+      fetchTourData(); // 삭제 후 데이터 다시 불러오기
+    } catch (error) {
+      console.error("삭제에 실패하였습니다.", error);
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleUpdate = () => {
+    setIsEditing(false);
+    fetchTourData(); // Re-fetch data after update
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false); // Exit editing mode
   };
 
   return (
     <Container>
-      {tourData ? (
-        <div>
-          {tourData
-            .filter(item => item !== null && item !== undefined) // null 또는 undefined가 아닌 항목만 필터링
-            .map(item => (
-              <Item key={item.tourScheduleId}>
-                <Title>{item.title}</Title>
-                <Detail>Schedule Day: {item.tourScheduleDay}</Detail>
-                <Detail>Start Date: {item.tourScheduleStart}</Detail>
-                <Detail>End Date: {item.tourScheduleEnd}</Detail>
-                <Detail>Contents: {item.contents}</Detail>
-                <Detail>Cost: {item.cost}</Detail>
-                <UpdatePages tourData={item} onUpdate={handleUpdate} />
-                {/* 수정 페이지 렌더링 */}
-                <DeleteModify tourData={item} onDelete={handleDelete} />
-              </Item>
-            ))}
-        </div>
-      ) : (
+      {loading ? (
         <Loading>Loading...</Loading>
+      ) : tourData ? (
+        isEditing ? (
+          <UpdatePages
+            tourData={tourData}
+            onUpdate={handleUpdate}
+            onCancel={handleCancel}
+          />
+        ) : (
+          <Item>
+            <Title>제목(Title): {tourData.tourScheduleTitle}</Title>
+            <Detail>작성 일자(Date Created): {tourData.tourScheduleDay}</Detail>
+            <Detail>시작일(Start Day): {tourData.tourScheduleStart}</Detail>
+            <Detail>종료일(Finish Day): {tourData.tourScheduleEnd}</Detail>
+            <Detail>비용(Cost): {tourData.cost}</Detail>
+            <Detail>내용(Contents): {tourData.contents}</Detail>
+            <Detail>일정표 색상(Schedule Color): {tourData.tourColor}</Detail>
+            <Button onClick={handleEditClick}>수정</Button>
+            <DeleteModify
+              tourId={tourData.tourId}
+              tourScheduleId={tourData.tourScheduleId}
+              onDelete={handleDelete}
+            />
+          </Item>
+        )
+      ) : (
+        <Message>No data available</Message>
       )}
     </Container>
   );
@@ -78,7 +107,6 @@ const DetailModify = () => {
 
 export default DetailModify;
 
-// Styled-components
 const Container = styled.div`
   padding: 20px;
   max-width: 800px;
@@ -89,16 +117,18 @@ const Container = styled.div`
 `;
 
 const Item = styled.div`
-  margin-bottom: 20px;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h2`
   margin-bottom: 10px;
   color: #333;
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 const Detail = styled.p`
@@ -109,4 +139,23 @@ const Detail = styled.p`
 const Loading = styled.p`
   text-align: center;
   color: #777;
+  font-style: italic;
+`;
+
+const Message = styled.p`
+  text-align: center;
+  color: #777;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;

@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { putUserPass } from "../../apis/ldh/apiuser";
 
@@ -8,6 +7,7 @@ const Drop = ({
   setSelectedModifyPass,
   setErrMsg,
   setUserUpdateAt,
+  userId,
 }) => {
   const [emptyPass, setEmptyPass] = useState("");
   const [emptyModiPass, setEmptyModiPass] = useState("");
@@ -15,6 +15,7 @@ const Drop = ({
   const navi = useNavigate();
 
   const reqData = {
+    uid: userId,
     upw: emptyPass,
     newPw: emptyModiPass,
   };
@@ -38,7 +39,7 @@ const Drop = ({
       setErrMsg("");
       const result = await putUserPass(reqData);
       console.log(result);
-      if (result.data.resultData === 1) {
+      if (result.data.statusCode === 1) {
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -56,17 +57,23 @@ const Drop = ({
         localStorage.setItem("user", "");
         navi("/login");
       }
+      if (result.data.statusCode === -1) {
+        setErrMsg("현재 비밀번호가 맞지 않습니다");
+      }
+      if (result.data.statusCode === -2) {
+        setErrMsg("비밀번호 양식은 영대문자,숫자 포함 8~20자 입니다");
+      }
     }
   };
 
   return selectedModifyPass ? (
     <form>
       <div className="form-group">
-        <label htmlFor="usr">비밀번호</label>
+        <label htmlFor="user">비밀번호</label>
         <input
           type="password"
           className="form-control"
-          id="usr"
+          id="user"
           value={emptyPass}
           onChange={e => {
             setEmptyPass(e.target.value);

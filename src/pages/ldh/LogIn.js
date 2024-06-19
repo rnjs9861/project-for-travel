@@ -4,6 +4,7 @@ import { postLogin } from "../../apis/ldh/apiuser";
 import { userInfoContext } from "../../context/UserInfoProvider";
 import "../../css/ldh/login/header.css";
 import "../../css/ldh/login/main.css";
+import logo from "../../images/Logo.jpg";
 
 const LogIn = ({ setOnHeader }) => {
   const { setIsUser } = useContext(userInfoContext);
@@ -56,13 +57,13 @@ const LogIn = ({ setOnHeader }) => {
   }, [isId, isPass]);
 
   return (
-    <div className="wrap">
+    <div className="login-page-wrap">
       <header className="header">
         <div className="header-inner">
           <div className="header-inner-home">
             <img
               className="alotlogo"
-              src="/images/ALOTlogo.png"
+              src={logo}
               onClick={() => {
                 navi("/");
                 setOnHeader(true);
@@ -132,15 +133,6 @@ const LogIn = ({ setOnHeader }) => {
                 </div>
                 <button className="button btn btn-info">로그인</button>
               </form>
-            </div>
-            <div className="user-login-menu">
-              <div
-                onClick={() => {
-                  navi("/signup");
-                }}
-              >
-                <span>회원가입</span>
-              </div>
             </div>
           </div>
         </div>

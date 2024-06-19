@@ -15,8 +15,8 @@ export const postLogin = async data => {
 
 export const getUserInfo = async isUser => {
   try {
-    const response = await axios.get(`/api/user?uid=dlehgusid1`);
-    return response;
+    const respon = await axios.get(`/api/user?signed_user_id=${isUser}`);
+    return respon;
   } catch (error) {
     console.log(error);
   }
@@ -28,6 +28,7 @@ export const putUserPass = async data => {
     const response = await axios.put(
       `/api/user/password?uid=${data.uid}&upw=${data.upw}&newPw=${data.newPw}`,
     );
+    console.log(response);
     return response;
   } catch (error) {
     console.log(error);

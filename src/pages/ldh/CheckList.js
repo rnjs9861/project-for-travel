@@ -87,6 +87,7 @@ const CheckList = () => {
         title: item.title,
         checked: item.checked,
       }));
+      setOnAdd("")
       setList(fetchedList);
       setIsTourIdSelected(true);
       setMessage("");

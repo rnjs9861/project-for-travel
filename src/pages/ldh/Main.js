@@ -2,6 +2,9 @@ import axios from "axios";
 import "../../css/ldh/main/main.css";
 import { useContext, useEffect, useState } from "react";
 import { userInfoContext } from "../../context/UserInfoProvider";
+import forest from "../../images/ldh/vacation-4192123_1280.jpg";
+import mountain from "../../images/ldh/mountains-7963159_1280.jpg";
+import snorkeling from "../../images/ldh/maldive-islands-1445675_1280.jpg";
 
 const Main = () => {
   const { isUser } = useContext(userInfoContext);
@@ -10,6 +13,7 @@ const Main = () => {
   const [tourFinishDay, setTourFinishDay] = useState("");
   const [tourLocation, setTourLocation] = useState("");
   const [tourBudget, setTourBudget] = useState(null);
+  const [helloUser, setHelloUser] = useState("");
   const [d_Day, setD_Day] = useState("");
 
   const getMain = async () => {
@@ -22,12 +26,14 @@ const Main = () => {
         setTourFinishDay(response.data.resultData.tourFinishDay);
         setTourLocation(response.data.resultData.tourLocation);
         setTourBudget(response.data.resultData.tourBudget);
+        setHelloUser(response.data.resultData.name);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  console.log(helloUser);
   const calcDDay = startday => {
     const today = new Date();
     const startDate = new Date(startday);
@@ -39,9 +45,7 @@ const Main = () => {
   };
 
   useEffect(() => {
-    if (isUser) {
-      getMain();
-    }
+    getMain();
   }, [isUser]);
 
   useEffect(() => {
@@ -54,21 +58,27 @@ const Main = () => {
         <div className="main-index-top-inner">
           <div className="main-index-top-inner-content">
             {isUser ? (
-              <>
-                <h2>{title}</h2>
-                <div className="main-index-top-content-banner">
-                  {/* <div className="main-index-top-userprofile">
-                    <span>userid님 반갑습니다</span>
-                  </div> */}
-                  <div className="main-index-content-wrap">
-                    <p>여행 장소 : {tourLocation}</p>
-                    <p>여행 시작일 : {tourStartDay}</p>
-                    <p>여행 종료일 : {tourFinishDay}</p>
-                    <p>예산 : {tourBudget} 원</p>
-                    <p>d-day : d-{d_Day}</p>
+              title ? (
+                <>
+                  <div className="main-index-top-userprofile">
+                    <span>{helloUser}님 반갑습니다</span>
                   </div>
+                  <h2>{title}</h2>
+                  <div className="main-index-top-content-banner">
+                    <div className="main-index-content-wrap">
+                      <p>여행 장소 : {tourLocation}</p>
+                      <p>여행 시작일 : {tourStartDay}</p>
+                      <p>여행 종료일 : {tourFinishDay}</p>
+                      <p>예산 : {tourBudget} 원</p>
+                      <p>d-day : d-{d_Day}</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <p>아직 계획이 설정되지 않았습니다. 계획세우기 페이지에서 여행 계획을 세워보세요.</p>
                 </div>
-              </>
+              )
             ) : (
               <>
                 <p>아직 회원이 아니신가요? 로그인이 필요한 서비스입니다</p>
@@ -106,8 +116,12 @@ const Main = () => {
             </div>
           </div>
         </div>
-        <div className="manual">
-          <div className="main-ad"></div>
+        <div className="main-index-adwrap">
+          <div className="main-index-ad">
+            <img src={forest} className="main-ad" />
+            <img src={snorkeling} className="main-ad" />
+            <img src={mountain} className="main-ad" />
+          </div>
         </div>
       </div>
     </div>

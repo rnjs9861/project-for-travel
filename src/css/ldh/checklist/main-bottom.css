@@ -18,11 +18,15 @@
   flex-wrap: wrap;
 }
 .main-bottom-check-list {
+  border: 1px solid;
   padding: 5px 30px 5px 5px;
   display: flex;
   align-items: center;
   height: 50px;
   gap: 10px;
+}
+p{
+  padding-top: 5px;
 }
 .main-bottom-check-list img {
   width: 20px;

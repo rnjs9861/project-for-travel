@@ -7,9 +7,9 @@ const Item = ({ item, onRemove, onCheck, index }) => {
     textDecoration: item.checked ? "line-through" : "none",
   };
   return (
-    <div className="main-bottom-check-list alert-info br-10">
+    <div className="main-bottom-check-list br-10">
       <img src={checkBox} className="boxico" onClick={onCheck} />
-      <p className="" style={lineDeco} onClick={onCheck}>
+      <p className="check-item" style={lineDeco} onClick={onCheck}>
         {item.title}
       </p>
       <img
