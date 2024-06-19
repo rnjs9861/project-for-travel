@@ -84,16 +84,6 @@ const Header = ({ onheader }) => {
                   캘린더
                 </a>
               </li>
-              <li className={onNavi === "detail" ? "active" : ""}>
-                <a
-                  href="#"
-                  onClick={() => {
-                    handleNavi("detail", "/detail");
-                  }}
-                >
-                  상세계획
-                </a>
-              </li>
               <li className={onNavi === "checklist" ? "active" : ""}>
                 <a
                   href="#"

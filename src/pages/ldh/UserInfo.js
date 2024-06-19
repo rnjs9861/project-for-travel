@@ -24,16 +24,18 @@ const UserInfo = () => {
 
   const getInfo = async isUser => {
     const result = await getUserInfo(isUser);
-    console.log(result);
     setUserId(result.data.resultData.uid);
     setUserEmail(result.data.resultData.email);
     setUserName(result.data.resultData.nm);
     setUserCreateAt(result.data.resultData.createdAt);
     setUserUpdateAt(result.data.resultData.updatedAt);
   };
+
   useEffect(() => {
-    getUserInfo(isUser);
-    getInfo(isUser);
+    if (isUser) {
+      getUserInfo(isUser);
+      getInfo(isUser);
+    }
   }, [isUser]);
 
   return (

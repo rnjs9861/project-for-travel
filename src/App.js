@@ -3,21 +3,19 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Calendars from "./components/gmu/Calendars";
 import CalendarsForAllPlan from "./components/gmu/CalendarsForAllPlan";
-import EditProfile from "./components/gmu/EditProfile";
-import ScheduleTest from "./pages/hwc/ScheduleTest";
+import Footer from "./components/layout/Footer";
 import Header from "./components/layout/Header";
 import { UserInfoProvider } from "./context/UserInfoProvider";
 import "./css/common.css";
 import "./css/reset.css";
-import TestPage from "./pages/TestPage";
 import PlanModifyPage from "./pages/gmu/PlanModifyPage";
 import PlanPage from "./pages/gmu/PlanPage";
 import SignupPage from "./pages/gmu/SignupPage";
+import ScheduleTest from "./pages/hwc/ScheduleTest";
 import CheckList from "./pages/ldh/CheckList";
 import LogIn from "./pages/ldh/LogIn";
-import UserInfo from "./pages/ldh/UserInfo";
 import Main from "./pages/ldh/Main";
-import Footer from "./components/gmu/Footer";
+import UserInfo from "./pages/ldh/UserInfo";
 
 function App() {
   const [onHeader, setOnHeader] = useState(true);

@@ -19,7 +19,6 @@ const Main = () => {
   const getMain = async () => {
     try {
       const response = await axios.get(`/api/main?signed_user_id=${isUser}`);
-      console.log(response);
       if (response.status === 200) {
         settitle(response.data.resultData.title);
         setTourStartDay(response.data.resultData.tourStartDay);
@@ -33,7 +32,6 @@ const Main = () => {
     }
   };
 
-  console.log(helloUser);
   const calcDDay = startday => {
     const today = new Date();
     const startDate = new Date(startday);
@@ -76,7 +74,10 @@ const Main = () => {
                 </>
               ) : (
                 <div>
-                  <p>아직 계획이 설정되지 않았습니다. 계획세우기 페이지에서 여행 계획을 세워보세요.</p>
+                  <p>
+                    아직 계획이 설정되지 않았습니다. 계획세우기 페이지에서 여행
+                    계획을 세워보세요.
+                  </p>
                 </div>
               )
             ) : (
