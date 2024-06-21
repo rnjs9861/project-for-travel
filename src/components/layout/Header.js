@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "../../css/ldh/header/header.css";
 import { useNavigate } from "react-router-dom";
 import { userInfoContext } from "../../context/UserInfoProvider";
+import logo from "../../images/ALOTlogo-Photoroom.png";
 
 const Header = ({ onheader }) => {
   const [onNavi, setOnNavi] = useState("");
@@ -56,7 +57,7 @@ const Header = ({ onheader }) => {
           <div className="navbar-header">
             <a className="navbar-brand" href="#">
               <img
-                src="/www/images/KakaoTalk_20240607_150139849.jpg"
+                src={logo}
                 className="alotimg"
                 onClick={() => {
                   handleNavi("home", "/");

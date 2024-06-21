@@ -31,27 +31,27 @@ const CheckList = () => {
     }
     if (onAdd === "") {
       return setMessage("추가할 물건을 기입해주세요");
-    } else {
-      const newItem = { tour_id: selectedTourId, title: onAdd, checked: false };
-      setList([...list, newItem]);
-      setOnAdd("");
-      try {
-        const result = await postList({ tourId: selectedTourId, title: onAdd });
-        setMessage(result.data.resultMsg);
-      } catch (error) {
-        console.error(error);
-      }
     }
+    setOnAdd("");
+    console.log("gd");
+    const result = await postList({ tourId: selectedTourId, title: onAdd });
+    console.log(result);
+    setMessage(result.data.resultMsg);
+    const newItem = {
+      checklistid: result.data.resultData,
+      title: onAdd,
+      checked: false,
+    };
+    setList([...list, newItem]);
   };
 
   const handleRemove = async index => {
     try {
-      const selectedCheckListId = list[index].tour_id;
+      const selectedCheckListId = list[index].checklistid;
       const res = await delList(selectedCheckListId);
       if (res.status === 200) {
         setList(list.filter((_, i) => i !== index));
         setMessage("삭제되었습니다");
-        await reLoadList();
       }
     } catch (error) {
       console.error(error);
@@ -63,24 +63,10 @@ const CheckList = () => {
       const updatedList = [...list];
       updatedList[index].checked = !updatedList[index].checked;
       setList(updatedList);
-      await checkPatch(list[index].tour_id);
+      await checkPatch(list[index].checklistid);
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const reLoadList = async () => {
-    const resultCheck = await getCheckList(selectedTourId);
-    console.log(resultCheck);
-    const fetchedList = await resultCheck.data.resultData.map(item => ({
-      tour_id: item.checklistId,
-      title: item.title,
-      checked: item.checked,
-    }));
-    console.log(fetchedList);
-    setOnAdd("");
-    setList(fetchedList);
-    setIsTourIdSelected(true);
   };
 
   const handleAllDel = async () => {
@@ -88,6 +74,7 @@ const CheckList = () => {
     try {
       await allDel(selectedTourId);
       setList([]);
+      setMessage("전체 목록이 삭제되었습니다");
     } catch (error) {
       console.error(error);
     }

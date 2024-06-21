@@ -1,4 +1,4 @@
-const Item = ({ item, onRemove, onCheck, index }) => {
+const Item = ({ item, onRemove, onCheck }) => {
   const checkBox = item.checked
     ? "/ldh/images/326563_box_check_icon.svg"
     : "/ldh/images/326558_blank_check_box_icon.svg";

@@ -11,7 +11,7 @@ Modal.setAppElement("#root");
 // axios.interceptors 설정: 전역에서 한 번만 설정
 axios.interceptors.response.use(
   response => {
-    console.log("Response data:", response.data);
+    // console.log("Response data:", response.data);
     return response;
   },
   error => {
