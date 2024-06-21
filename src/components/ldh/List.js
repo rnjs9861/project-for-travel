@@ -34,7 +34,6 @@ const List = ({
               <Item
                 key={index}
                 item={item}
-                index={index}
                 onRemove={() => handleRemove(index)}
                 onCheck={() => handleCheck(index)}
               />

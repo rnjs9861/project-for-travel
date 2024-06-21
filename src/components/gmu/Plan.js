@@ -30,7 +30,7 @@ const Plan = () => {
 
   const showImage = () => {
     const imgNum = Math.floor(Math.random() * 5);
-    console.log(imgNum);
+    // console.log(imgNum);
 
     setRandomAd(adArray[imgNum]);
     setTimeout(showImage, 10000);

@@ -24,7 +24,7 @@ const Main = () => {
         setTourStartDay(response.data.resultData.tourStartDay);
         setTourFinishDay(response.data.resultData.tourFinishDay);
         setTourLocation(response.data.resultData.tourLocation);
-        setTourBudget(response.data.resultData.tourBudget);
+        setTourBudget(response.data.resultData.tourBudget.toLocaleString());
         setHelloUser(response.data.resultData.name);
       }
     } catch (error) {
@@ -39,6 +39,7 @@ const Main = () => {
     startDate.setHours(0, 0, 0, 0);
     const dDay = startDate - today;
     const diffDays = Math.ceil(dDay / (1000 * 60 * 60 * 24));
+
     setD_Day(diffDays);
   };
 
