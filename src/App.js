@@ -42,7 +42,7 @@ function App() {
           {/* <Route path="/editmypage" element={<EditProfile />} /> */}
           {/* <Route path="/detail/:id" element={<Detail />} /> */}
           <Route
-            path="/detail/:tourScheduleId"
+            path="/detail/:tourId/:tourScheduleId"
             element={<ScheduleTest></ScheduleTest>}
           ></Route>
         </Routes>

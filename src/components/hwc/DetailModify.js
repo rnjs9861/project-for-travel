@@ -6,39 +6,37 @@ import styled from "styled-components";
 import UpdatePages from "./UpdatePages";
 import DeletePage from "./DeletePage";
 
-const DetailModify = ({
-  initialTourData,
-  fetchTourData: parentFetchTourData,
-}) => {
-  const { tourScheduleId } = useParams();
-  const [tourData, setTourData] = useState(initialTourData);
-  const [loading, setLoading] = useState(!initialTourData);
+const DetailModify = () => {
+  const { tourId, tourScheduleId } = useParams();
+  const [tourData, setTourData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
-  const fetchData = async () => {
-    if (!tourScheduleId) return;
-
-    try {
-      const response = await axios.get(
-        `${SERVER}/api/tour/schedule/${tourScheduleId}`,
-      );
-
-      const { data } = response;
-
-      if (Array.isArray(data.resultData)) {
-        setTourData(data.resultData[0]); // Assuming you want the first item in the array
-      } else {
-        setTourData(data.resultData);
-      }
-
-      setLoading(false); // Set loading to false after successful fetch
-    } catch (error) {
-      console.error("Error fetching tour data:", error);
-      setLoading(false); // Set loading to false in case of error as well
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      if (!tourScheduleId) return;
+
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${SERVER}/api/tour/schedule/${tourScheduleId}`,
+        );
+
+        const { data } = response;
+
+        if (Array.isArray(data.resultData)) {
+          setTourData(data.resultData[0]);
+        } else {
+          setTourData(data.resultData);
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching tour data:", error);
+        setLoading(false);
+      }
+    };
+
     fetchData();
   }, [tourScheduleId]);
 
@@ -46,13 +44,31 @@ const DetailModify = ({
     setIsEditing(true);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setIsEditing(false);
-    fetchData(); // Re-fetch data after update
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${SERVER}/api/tour/schedule/${tourScheduleId}`,
+      );
+
+      const { data } = response;
+
+      if (Array.isArray(data.resultData)) {
+        setTourData(data.resultData[0]);
+      } else {
+        setTourData(data.resultData);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error re-fetching tour data after update:", error);
+      setLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    setIsEditing(false); // Exit editing mode
+    setIsEditing(false);
   };
 
   return (
@@ -75,11 +91,7 @@ const DetailModify = ({
             <Detail>비용(Cost): {tourData.cost}</Detail>
             <Detail>내용(Contents): {tourData.contents}</Detail>
             <Button onClick={handleEditClick}>수정</Button>
-            <DeletePage
-              tourId={tourData.tourId}
-              tourScheduleId={tourData.tourScheduleId}
-              onDelete={fetchData}
-            />
+            <DeletePage tourId={tourId} tourScheduleId={tourScheduleId} />
           </Item>
         )
       ) : (

@@ -75,11 +75,9 @@ const UpdatePage = ({ tourData, onUpdate, onCancel }) => {
           cost: parseInt(cost, 10),
         },
       );
-      console.log("Successfully updated:", response.data);
       onUpdate();
       closeModal(); // 수정 완료 후 Modal 닫기
     } catch (error) {
-      console.error("Error updating schedule:", error);
       setErrorMessage("수정에 실패했습니다. 다시 시도해 주세요.");
     }
   };
